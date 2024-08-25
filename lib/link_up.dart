@@ -5,6 +5,7 @@ import 'package:link_up/core/theming/colors.dart';
 import 'package:link_up/features/login/login_screen.dart';
 import 'package:link_up/features/onboarding/onboarding_screen.dart';
 import 'package:link_up/features/phone_verfication/phone_verfication_screen.dart';
+import 'package:link_up/features/profile/profile_screen.dart';
 
 class LinkUp extends StatelessWidget {
   const LinkUp({super.key});
@@ -28,6 +29,7 @@ class LinkUp extends StatelessWidget {
           '/onboarding': (context) => const OnboardingScreen(),
           '/login': (context) => const LoginScreen(),
           '/phone_verification': (context) => PhoneVerificationScreen(),
+          '/profile':(context) => const ProfileScreen(),
         },
         initialRoute: '/onboarding',
       ),
