@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_up/core/helpers/spacing.dart';
 import 'package:link_up/core/theming/colors.dart';
 import 'package:link_up/core/widgets/app_text_button.dart';
-import 'package:link_up/features/login/login_screen.dart';
 
 class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({super.key});
@@ -43,10 +42,7 @@ class OnboardingScreen extends StatelessWidget {
               ),
               borderRadius: 30.r,
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const LoginScreen()));
+                Navigator.pushNamed(context, '/login');
               },
             ),
           ],
