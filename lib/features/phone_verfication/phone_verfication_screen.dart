@@ -56,15 +56,26 @@ class PhoneVerificationScreen extends StatelessWidget {
               ),
               verticalSpace(64.h),
               OTPInput(
-                length: 4, // Assuming the OTP is 4 digits
+                length: 6, // Assuming the OTP is 4 digits
                 controller: otpController,
-                spacing: 16.0,
+                spacing: 4.0,
                 onSubmit: (otp) {
-                  if (otp == '1234') {
+                  if (otp == '123456') {
                     Navigator.pushNamed(context, '/profile');
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Invalid OTP')),
+                      const SnackBar(
+                        content: Text(
+                          'Invalid OTP',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: ColorsManager.offWhite,
+                            fontSize: 16.0,
+                          ),
+                        ),
+                        backgroundColor: ColorsManager.dark,
+                        behavior: SnackBarBehavior.floating,
+                      ),
                     );
                   }
                 },

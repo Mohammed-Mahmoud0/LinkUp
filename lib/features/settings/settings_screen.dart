@@ -4,31 +4,14 @@ import 'package:link_up/core/helpers/spacing.dart';
 import 'package:link_up/core/theming/colors.dart';
 import 'package:link_up/core/widgets/app_text_button.dart';
 import 'package:link_up/core/widgets/app_text_form_field.dart';
-import 'package:link_up/features/profile/widgets/profile_image_widget.dart';
+import 'package:link_up/features/settings/widgets/profile_image_widget.dart';
 
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+class SettingsScreen extends StatelessWidget {
+  const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        leading: GestureDetector(
-          child: const Icon(
-            Icons.keyboard_arrow_left,
-          ),
-          onTap: () {
-            Navigator.pop(context);
-          },
-        ),
-        title: const Text(
-          'Your Profile',
-          style: TextStyle(
-            color: ColorsManager.offWhite,
-          ),
-        ),
-      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -49,7 +32,7 @@ class ProfileScreen extends StatelessWidget {
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(4.r),
               ),
-              hintText: 'First Name (Required)',
+              hintText: 'First Name',
               hintStyle: const TextStyle(
                 color: ColorsManager.offWhite,
               ),
@@ -68,7 +51,7 @@ class ProfileScreen extends StatelessWidget {
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(4.r),
               ),
-              hintText: 'Last Name (Optional)',
+              hintText: 'Last Name',
               hintStyle: const TextStyle(
                 color: ColorsManager.offWhite,
               ),
@@ -82,9 +65,7 @@ class ProfileScreen extends StatelessWidget {
                 fontSize: 16.sp,
               ),
               borderRadius: 30.r,
-              onPressed: () {
-                Navigator.pushNamed(context, '/home');
-              },
+              onPressed: () {},
             ),
           ],
         ),
