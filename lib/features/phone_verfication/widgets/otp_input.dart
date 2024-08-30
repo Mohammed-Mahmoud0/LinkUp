@@ -58,8 +58,8 @@ class _OTPInputState extends State<OTPInput> {
         return Padding(
           padding: EdgeInsets.symmetric(horizontal: widget.spacing),
           child: SizedBox(
-            width: 50.w,
-            height: 50.h,
+            width: 45.w,
+            height: 45.h,
             child: TextFormField(
               textAlign: TextAlign.center,
               style: TextStyle(
@@ -75,7 +75,7 @@ class _OTPInputState extends State<OTPInput> {
                 fillColor: ColorsManager.dark,
                 filled: true,
                 counterText: '',
-                contentPadding: const EdgeInsets.all(12.0),
+                contentPadding: const EdgeInsets.all(0.0),
                 enabledBorder: OutlineInputBorder(
                   borderSide: const BorderSide(
                     color: ColorsManager.dark,

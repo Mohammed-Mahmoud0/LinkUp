@@ -16,6 +16,7 @@ class AppTextFormField extends StatelessWidget {
   final TextEditingController? controller;
   final TextInputType? keyboardType;
   final bool? autoFocus;
+  final String? Function(String?)? validator;
 
   const AppTextFormField({
     super.key,
@@ -32,37 +33,31 @@ class AppTextFormField extends StatelessWidget {
     this.controller,
     this.keyboardType,
     this.autoFocus,
+    this.validator,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
+      validator: validator,
       decoration: InputDecoration(
         isDense: true,
         contentPadding: contentPadding ??
             EdgeInsets.symmetric(
-              horizontal: 20.w,
-              vertical: 18.h,
+              horizontal: 16.w,
+              vertical: 12.h,
             ),
         focusedBorder: focusedBorder ??
             OutlineInputBorder(
-              borderSide: const BorderSide(
-                color: ColorsManager.mainBlue,
-                width: 1.3,
-              ),
               borderRadius: BorderRadius.circular(
-                16.0,
+                4.r,
               ),
             ),
         enabledBorder: enabledBorder ??
             OutlineInputBorder(
-              borderSide: const BorderSide(
-                color: ColorsManager.lighterGray,
-                width: 1.3,
-              ),
               borderRadius: BorderRadius.circular(
-                16.0,
+                4.r,
               ),
             ),
         errorBorder: OutlineInputBorder(
@@ -79,11 +74,11 @@ class AppTextFormField extends StatelessWidget {
           ),
           borderRadius: BorderRadius.circular(16.0),
         ),
-        hintStyle: hintStyle,
+        hintStyle: hintStyle ?? const TextStyle(color: ColorsManager.offWhite),
         hintText: hintText,
         suffixIcon: suffixIcon,
         prefixIcon: prefixIcon,
-        fillColor: backgroundColor ?? ColorsManager.moreLightGray,
+        fillColor: backgroundColor ?? ColorsManager.dark,
         filled: true,
       ),
       obscureText: isObscureText ?? false,

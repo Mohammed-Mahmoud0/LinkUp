@@ -11,41 +11,44 @@ class OnboardingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            verticalSpace(100.h),
-            Image.asset('assets/images/Illustration.png'),
-            verticalSpace(50.h),
-            Text(
-              'Connect easily\nwith your family and friends\nover countries',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 24.sp,
-                color: ColorsManager.offWhite,
+        padding: EdgeInsets.all(16.0.w),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              verticalSpace(100.h),
+              Image.asset('assets/images/Illustration.png'),
+              verticalSpace(50.h),
+              Text(
+                'Connect easily\nwith your family and friends\nover countries',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 24.sp,
+                  color: ColorsManager.offWhite,
+                ),
               ),
-            ),
-            verticalSpace(130.h),
-            Text(
-              'Terms & Privacy Policy',
-              style: TextStyle(
-                color: ColorsManager.offWhite,
-                fontSize: 13.sp,
+              verticalSpace(100.h),
+              Text(
+                'Terms & Privacy Policy',
+                style: TextStyle(
+                  color: ColorsManager.offWhite,
+                  fontSize: 13.sp,
+                ),
               ),
-            ),
-            verticalSpace(16.h),
-            AppTextButton(
-              buttonText: 'Start Messaging',
-              textStyle: TextStyle(
-                color: ColorsManager.offWhite,
-                fontSize: 16.sp,
+              verticalSpace(16.h),
+              AppTextButton(
+                buttonText: 'Start Messaging',
+                textStyle: TextStyle(
+                  color: ColorsManager.offWhite,
+                  fontSize: 16.sp,
+                ),
+                borderRadius: 30.r,
+                onPressed: () {
+                  Navigator.pushNamed(context, '/email_login');
+                },
               ),
-              borderRadius: 30.r,
-              onPressed: () {
-                Navigator.pushNamed(context, '/login');
-              },
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

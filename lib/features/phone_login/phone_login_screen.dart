@@ -1,3 +1,4 @@
+import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_up/core/helpers/spacing.dart';
@@ -5,8 +6,27 @@ import 'package:link_up/core/theming/colors.dart';
 import 'package:link_up/core/widgets/app_text_button.dart';
 import 'package:link_up/core/widgets/app_text_form_field.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+class PhoneLoginScreen extends StatefulWidget {
+
+  PhoneLoginScreen({super.key});
+
+  @override
+  State<PhoneLoginScreen> createState() => _PhoneLoginScreenState();
+}
+
+class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
+  Country selectedCountry = Country(
+    phoneCode: '20',
+    countryCode: 'EG',
+    e164Sc: 0,
+    geographic: true,
+    level: 1,
+    name: 'Egypt',
+    example: '10 20177500',
+    displayName: 'Egypt (+20)',
+    displayNameNoCountryCode: 'Egypt',
+    e164Key: '20-EG-0',
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -45,29 +65,40 @@ class LoginScreen extends StatelessWidget {
               verticalSpace(50.h),
               Row(
                 children: [
-                  Container(
-                    height: 44.h,
-                    width: 70.w,
-                    decoration: BoxDecoration(
-                      color: ColorsManager.dark,
-                      borderRadius: BorderRadius.circular(4.r),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          'assets/images/Flag.png',
-                          height: 16.h,
+                  GestureDetector(
+                    onTap: () {
+                      showCountryPicker(
+                        countryListTheme: CountryListThemeData(
+                          bottomSheetHeight: 550.h,
+                          backgroundColor: ColorsManager.backgroundDark,
                         ),
-                        horizontalSpace(8.w),
-                        Text(
-                          '+20',
-                          style: TextStyle(
-                            color: ColorsManager.offWhite,
-                            fontSize: 12.sp,
+                        context: context,
+                        onSelect: (value) {
+                          setState(() {
+                            selectedCountry = value;
+                          });
+                        },
+                      );
+                    },
+                    child: Container(
+                      height: 44.h,
+                      width: 70.w,
+                      decoration: BoxDecoration(
+                        color: ColorsManager.dark,
+                        borderRadius: BorderRadius.circular(4.r),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            '${selectedCountry.flagEmoji}  +${selectedCountry.phoneCode}',
+                            style: TextStyle(
+                              color: ColorsManager.offWhite,
+                              fontSize: 16.sp,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                   horizontalSpace(8.w),
@@ -105,7 +136,6 @@ class LoginScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.pushNamed(context, '/phone_verification');
                 },
-
               ),
             ],
           ),

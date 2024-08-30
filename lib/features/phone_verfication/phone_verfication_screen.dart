@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_up/core/helpers/spacing.dart';
 import 'package:link_up/core/theming/colors.dart';
-import 'package:link_up/core/widgets/app_text_button.dart';
-import 'package:link_up/core/widgets/app_text_form_field.dart';
 import 'package:link_up/features/phone_verfication/widgets/otp_input.dart';
 
 class PhoneVerificationScreen extends StatelessWidget {
