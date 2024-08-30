@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_up/core/theming/colors.dart';
 import 'package:link_up/features/chat/chats_screen.dart';
-import 'package:link_up/features/email_login/email_login_screen.dart';
+import 'package:link_up/features/email_login/ui/email_login_screen.dart';
 import 'package:link_up/features/email_register/email_register_screen.dart';
 import 'package:link_up/features/home/home_screen.dart';
 import 'package:link_up/features/onboarding/onboarding_screen.dart';
@@ -32,7 +32,7 @@ class LinkUp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         routes: {
           '/onboarding': (context) => const OnboardingScreen(),
-          '/email_login': (context) => const EmailLoginScreen(),
+          '/email_login': (context) =>  EmailLoginScreen(),
           '/email_register': (context) => const EmailRegisterScreen(),
           '/phone_login': (context) => PhoneLoginScreen(),
           '/phone_verification': (context) => PhoneVerificationScreen(),

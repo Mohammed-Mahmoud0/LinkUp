@@ -5,7 +5,7 @@ import 'package:link_up/core/helpers/spacing.dart';
 import 'package:link_up/core/theming/style.dart';
 import 'package:link_up/core/widgets/app_text_button.dart';
 import 'package:link_up/core/widgets/app_text_form_field.dart';
-import 'package:link_up/features/email_login/widgets/terms_and_conditions_text.dart';
+import 'package:link_up/features/email_login/ui/widgets/terms_and_conditions_text.dart';
 import 'package:link_up/features/email_register/widgets/already_have_account.dart';
 
 class EmailRegisterScreen extends StatefulWidget {
