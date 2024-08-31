@@ -12,4 +12,4 @@ class LoginErrorState extends LoginStates {
   LoginErrorState(this.errorMessage);
 }
 
-class LoginIsObscureText extends LoginStates {}
+class LoginIsObscureTextState extends LoginStates {}

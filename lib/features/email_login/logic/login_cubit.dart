@@ -26,6 +26,6 @@ class LoginCubit extends Cubit<LoginStates> {
 
   void changeObscureTextStatus() {
     isObscureText = !isObscureText;
-    emit(LoginIsObscureText());
+    emit(LoginIsObscureTextState());
   }
 }
