@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:link_up/core/helpers/show_snack_bar.dart';
 import 'package:link_up/core/helpers/spacing.dart';
 import 'package:link_up/core/helpers/validators.dart';
 import 'package:link_up/core/theming/colors.dart';
@@ -36,20 +38,7 @@ class EmailLoginScreen extends StatelessWidget {
                   if (state is LoginSuccessState) {
                     Navigator.pushReplacementNamed(context, '/home');
                   } else if (state is LoginErrorState) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          state.errorMessage,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: ColorsManager.offWhite,
-                            fontSize: 16.0,
-                          ),
-                        ),
-                        backgroundColor: ColorsManager.dark,
-                        behavior: SnackBarBehavior.floating,
-                      ),
-                    );
+                    showSnackBar(context, state.errorMessage);
                   }
                 },
                 builder: (context, state) {
@@ -121,9 +110,28 @@ class EmailLoginScreen extends StatelessWidget {
                             verticalSpace(24),
                             Align(
                               alignment: AlignmentDirectional.centerEnd,
-                              child: Text(
-                                'Forgot Password?',
-                                style: TextStyles.font13blueregular,
+                              child: GestureDetector(
+                                child: Text(
+                                  'Forgot Password?',
+                                  style: TextStyles.font13blueregular,
+                                ),
+                                onTap: () async {
+                                  try {
+                                    if (!email.text.isEmpty) {
+                                      await FirebaseAuth.instance
+                                          .sendPasswordResetEmail(
+                                              email: email.text);
+                                      showSnackBar(context,
+                                          'Password reset email sent to ${email.text}');
+                                    } else {
+                                      showSnackBar(
+                                          context, 'Please Enter An Email');
+                                    }
+                                  } on Exception catch (e) {
+                                    showSnackBar(context,
+                                        'Something went wrong! try again later');
+                                  }
+                                },
                               ),
                             ),
                             verticalSpace(40),

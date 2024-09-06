@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_up/core/theming/colors.dart';
+import 'package:link_up/core/theming/icon_broken.dart';
 
 class ProfileImageWidget extends StatelessWidget {
   const ProfileImageWidget({
@@ -18,8 +19,9 @@ class ProfileImageWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(50.r),
             color: ColorsManager.dark,
           ),
-          child: Image.asset(
-            'assets/images/person.png',
+          child: Icon(
+            IconBroken.Profile,
+            size: 56.sp,
           ),
         ),
         const Positioned(

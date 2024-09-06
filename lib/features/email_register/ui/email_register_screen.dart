@@ -109,15 +109,7 @@ class EmailRegisterScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            verticalSpace(24),
-                            Align(
-                              alignment: AlignmentDirectional.centerEnd,
-                              child: Text(
-                                'Forgot Password?',
-                                style: TextStyles.font13blueregular,
-                              ),
-                            ),
-                            verticalSpace(40),
+                            verticalSpace(64),
                             if (state is RegisterLoadingState)
                               const CircularProgressIndicator(
                                 backgroundColor: ColorsManager.mainBlue,
@@ -130,7 +122,11 @@ class EmailRegisterScreen extends StatelessWidget {
                                 onPressed: () {
                                   if (formKey.currentState!.validate()) {
                                     registerCubit.registerWithEmailAndPassword(
-                                        email.text, password.text);
+                                      email.text,
+                                      password.text,
+                                      name.text,
+                                      phone.text,
+                                    );
                                   }
                                 },
                               ),

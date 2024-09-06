@@ -20,7 +20,7 @@ class _ChatsScreenState extends State<HomeScreen> {
 
   final List<Widget> _screens = [
     const ChatsScreen(),
-    const SettingsScreen(),
+     SettingsScreen(),
   ];
 
   void _onItemTapped(int index) {
