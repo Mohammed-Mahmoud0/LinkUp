@@ -17,6 +17,7 @@ class AppTextFormField extends StatelessWidget {
   final TextInputType? keyboardType;
   final bool? autoFocus;
   final String? Function(String?)? validator;
+  final bool? readOnly;
 
   const AppTextFormField({
     super.key,
@@ -34,6 +35,7 @@ class AppTextFormField extends StatelessWidget {
     this.keyboardType,
     this.autoFocus,
     this.validator,
+    this.readOnly,
   });
 
   @override
@@ -87,6 +89,7 @@ class AppTextFormField extends StatelessWidget {
       cursorColor: ColorsManager.mainBlue,
       cursorHeight: 20.h,
       autofocus: autoFocus ?? false,
+      readOnly: readOnly ?? false,
     );
   }
 }

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_up/core/theming/colors.dart';
-import 'package:link_up/features/chat/chats_screen.dart';
+import 'package:link_up/features/chat/ui/chats_screen.dart';
 import 'package:link_up/features/email_login/ui/email_login_screen.dart';
 import 'package:link_up/features/email_register/ui/email_register_screen.dart';
 import 'package:link_up/features/home/home_screen.dart';
@@ -68,7 +68,7 @@ class LinkUp extends StatelessWidget {
                 '/phone_verification': (context) => PhoneVerificationScreen(),
                 '/profile': (context) => const ProfileScreen(),
                 '/chats': (context) => const ChatsScreen(),
-                '/settings': (context) =>  SettingsScreen(),
+                '/settings': (context) => const SettingsScreen(),
                 '/home': (context) => const HomeScreen(),
               },
               initialRoute: snapshot.data ?? '/onboarding',

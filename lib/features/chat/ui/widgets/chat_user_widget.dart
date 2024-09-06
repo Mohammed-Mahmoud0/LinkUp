@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_up/core/helpers/spacing.dart';
 import 'package:link_up/core/theming/colors.dart';
+import 'package:link_up/core/theming/icon_broken.dart';
 
 class ChatUserWidget extends StatelessWidget {
+  final String userName;
+
   const ChatUserWidget({
     super.key,
+    required this.userName,
   });
 
   @override
@@ -16,15 +20,17 @@ class ChatUserWidget extends StatelessWidget {
           height: 64.h,
           width: 64.w,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(32.r),
+            borderRadius: BorderRadius.circular(50.r),
+            color: ColorsManager.dark,
           ),
-          child: Image.asset(
-            'assets/images/man.png',
+          child: Icon(
+            IconBroken.Profile,
+            size: 40.sp,
           ),
         ),
         horizontalSpace(16.w),
         Text(
-          'Mohamed Mahmoud',
+          userName,
           style: TextStyle(
             color: ColorsManager.offWhite,
             fontSize: 16.sp,

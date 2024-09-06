@@ -11,3 +11,15 @@ class GetUserDataErrorState extends SettingsStates {
 
   GetUserDataErrorState(this.error);
 }
+
+class UpdateUserDataSuccessState extends SettingsStates {
+  final String message;
+
+  UpdateUserDataSuccessState(this.message);
+}
+
+class UpdateUserDataErrorState extends SettingsStates {
+  final String error;
+
+  UpdateUserDataErrorState(this.error);
+}

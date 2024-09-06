@@ -4,8 +4,7 @@ import 'package:link_up/core/helpers/spacing.dart';
 import 'package:link_up/core/theming/colors.dart';
 import 'package:link_up/core/theming/icon_broken.dart';
 import 'package:link_up/core/widgets/app_text_form_field.dart';
-import 'package:link_up/features/chat/chats_screen.dart';
-import 'package:link_up/features/chat/widgets/chat_user_widget.dart';
+import 'package:link_up/features/chat/ui/chats_screen.dart';
 import 'package:link_up/features/settings/settings_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -20,7 +19,7 @@ class _ChatsScreenState extends State<HomeScreen> {
 
   final List<Widget> _screens = [
     const ChatsScreen(),
-     SettingsScreen(),
+    const SettingsScreen(),
   ];
 
   void _onItemTapped(int index) {
