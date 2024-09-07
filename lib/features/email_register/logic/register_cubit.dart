@@ -28,6 +28,7 @@ class RegisterCubit extends Cubit<RegisterStates> {
         'name': name,
         'email': email,
         'phone': phone,
+        'uid': credential.user!.uid,
       });
       emit(RegisterSuccessState());
     } on FirebaseAuthException catch (e) {

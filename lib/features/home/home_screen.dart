@@ -30,6 +30,7 @@ class _ChatsScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,

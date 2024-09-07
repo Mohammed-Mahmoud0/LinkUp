@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,6 +7,7 @@ import 'package:link_up/core/theming/colors.dart';
 import 'package:link_up/core/widgets/app_text_form_field.dart';
 import 'package:link_up/features/chat/logic/chats_cubit.dart';
 import 'package:link_up/features/chat/logic/chats_states.dart';
+import 'package:link_up/features/in_chat/ui/in_chat_screen.dart';
 import 'package:link_up/features/chat/ui/widgets/chat_user_widget.dart';
 
 class ChatsScreen extends StatelessWidget {
@@ -73,6 +75,18 @@ class ChatsScreen extends StatelessWidget {
                             children: [
                               ChatUserWidget(
                                 userName: user['name'],
+                                userId: user['uid'],
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => InChatScreen(
+                                        userId: user['uid'],
+                                        userName: user['name'],
+                                      ),
+                                    ),
+                                  );
+                                },
                               ),
                               verticalSpace(16.h),
                             ],
