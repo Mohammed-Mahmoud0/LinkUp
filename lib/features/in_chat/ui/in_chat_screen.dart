@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:link_up/core/helpers/spacing.dart';
 import 'package:link_up/core/models/message.dart';
@@ -10,12 +11,15 @@ class InChatScreen extends StatelessWidget {
   final String userId;
   final String userName;
   final TextEditingController _messageController = TextEditingController();
+  late final String chatId;
 
   InChatScreen({
     super.key,
     required this.userId,
     required this.userName,
-  });
+  }) {
+    chatId = createChatId(userId);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,19 +39,45 @@ class InChatScreen extends StatelessWidget {
           Expanded(
             child: Container(
                 color: ColorsManager.dark,
-                child: SingleChildScrollView(
-                  physics: BouncingScrollPhysics(),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        ChatBubbleSender(
-                            message: Message('Hello, how are you?', '1')),
-                        ChatBubbleReceiver(message: Message('iam good', '2')),
-                        ChatBubbleSender(
-                            message: Message('Hello, how are you?', '1')),
-                      ],
-                    ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: StreamBuilder<QuerySnapshot>(
+                          stream: FirebaseFirestore.instance
+                              .collection('chats')
+                              .doc(chatId)
+                              .collection('messages')
+                              .orderBy('timestamp', descending: false)
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              final messages = snapshot.data!.docs
+                                  .map((doc) => Message(
+                                        doc['message'],
+                                        doc['senderId'],
+                                      ))
+                                  .toList();
+
+                              return ListView.builder(
+                                itemCount: messages.length,
+                                itemBuilder: (context, index) {
+                                  final message = messages[index];
+                                  if (message.senderId == userId) {
+                                    return ChatBubbleSender(message: message);
+                                  } else {
+                                    return ChatBubbleReceiver(message: message);
+                                  }
+                                },
+                              );
+                            } else {
+                              return Center(child: CircularProgressIndicator());
+                            }
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                 )),
           ),
@@ -76,8 +106,10 @@ class InChatScreen extends StatelessWidget {
                 ),
                 horizontalSpace(16),
                 GestureDetector(
-                  onTap: () {
+                  onTap: () async {
                     if (_messageController.text.isNotEmpty) {
+                      await sendMessage(
+                          chatId, userId, _messageController.text);
                       print('Message sent: ${_messageController.text}');
                       _messageController.clear();
                     }
@@ -94,4 +126,43 @@ class InChatScreen extends StatelessWidget {
       ),
     );
   }
+
+  Future<void> sendMessage(
+      String chatId, String senderId, String message) async {
+    FirebaseFirestore.instance
+        .collection('chats')
+        .doc(chatId)
+        .collection('messages')
+        .add({
+      'senderId': senderId,
+      'message': message,
+      'timestamp': FieldValue.serverTimestamp(),
+    });
+  }
+
+  Future<void> createChat(String user1Id, String user2Id) async {
+    final chatDoc = await FirebaseFirestore.instance
+        .collection('chats')
+        .where('users', arrayContains: user1Id)
+        .where('users', arrayContains: user2Id)
+        .get();
+
+    if (chatDoc.docs.isEmpty) {
+      // Create a new chat document
+      await FirebaseFirestore.instance.collection('chats').add({
+        'users': [user1Id, user2Id],
+      });
+    }
+  }
+
+
+  String createChatId(String otherUserId) {
+    // Create a chatId combining userId and otherUserId in a consistent way
+    if (userId.compareTo(otherUserId) > 0) {
+      return '$userId-$otherUserId';
+    } else {
+      return '$otherUserId-$userId';
+    }
+  }
+
 }
