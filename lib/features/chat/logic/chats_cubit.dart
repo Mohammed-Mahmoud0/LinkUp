@@ -8,12 +8,10 @@ class ChatsCubit extends Cubit<ChatsStates> {
 
   List<Map<String, dynamic>> users = [];
 
-  // Function to get users from Firestore
   void getChats() async {
     try {
       emit(ChatsLoadingState());
 
-      // Fetch users from Firestore
       var snapshot = await FirebaseFirestore.instance.collection('users').get();
 
       users = snapshot.docs.map((doc) => doc.data()).toList();

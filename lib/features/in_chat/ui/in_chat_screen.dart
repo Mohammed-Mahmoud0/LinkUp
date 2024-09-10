@@ -42,7 +42,7 @@ class _InChatScreenState extends State<InChatScreen> {
 
     Future.delayed(
       Duration(milliseconds: 500),
-        () => scrollDown(),
+      () => scrollDown(),
     );
   }
 
@@ -55,11 +55,13 @@ class _InChatScreenState extends State<InChatScreen> {
   }
 
   void scrollDown() {
-    scrollController.animateTo(
-      scrollController.position.maxScrollExtent,
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.easeOut,
-    );
+    if (scrollController.hasClients) {
+      scrollController.animateTo(
+        scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeOut,
+      );
+    }
   }
 
   @override
@@ -115,11 +117,11 @@ class _InChatScreenState extends State<InChatScreen> {
                 GestureDetector(
                   onTap: () async {
                     if (_messageController.text.isNotEmpty) {
-                      await sendMessage(widget.receiverId, _messageController.text);
+                      await sendMessage(
+                          widget.receiverId, _messageController.text);
                       _messageController.clear();
+                      scrollDown();
                     }
-
-                    scrollDown();
                   },
                   child: const Icon(
                     IconBroken.Send,
@@ -146,6 +148,15 @@ class _InChatScreenState extends State<InChatScreen> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         }
+
+        if (snapshot.data!.docs.isEmpty || !snapshot.hasData) {
+          return const Center(child: Text('No messages yet...'));
+        }
+        //
+        // WidgetsBinding.instance.addPostFrameCallback((_) {
+        //   scrollDown();
+        // });
+
 
         return ListView.builder(
           controller: scrollController,
