@@ -8,10 +8,9 @@ import 'package:link_up/core/theming/icon_broken.dart';
 import 'package:link_up/core/widgets/app_text_form_field.dart';
 import 'package:link_up/features/in_chat/ui/widgets/chat_buble.dart';
 
-class InChatScreen extends StatelessWidget {
+class InChatScreen extends StatefulWidget {
   final String receiverId;
   final String receiverName;
-  final TextEditingController _messageController = TextEditingController();
 
   InChatScreen({
     super.key,
@@ -20,11 +19,56 @@ class InChatScreen extends StatelessWidget {
   });
 
   @override
+  State<InChatScreen> createState() => _InChatScreenState();
+}
+
+class _InChatScreenState extends State<InChatScreen> {
+  final TextEditingController _messageController = TextEditingController();
+  FocusNode focusNode = FocusNode();
+  ScrollController scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    focusNode.addListener(() {
+      if (focusNode.hasFocus) {
+        Future.delayed(
+          const Duration(milliseconds: 500),
+          () => scrollDown(),
+        );
+      }
+    });
+
+    Future.delayed(
+      Duration(milliseconds: 500),
+        () => scrollDown(),
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    focusNode.dispose();
+    _messageController.dispose();
+  }
+
+  void scrollDown() {
+    scrollController.animateTo(
+      scrollController.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeOut,
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(receiverName),
+        title: Text(widget.receiverName),
         backgroundColor: Colors.transparent,
+        elevation: 0,
         leading: GestureDetector(
           onTap: () => Navigator.pop(context),
           child: const Icon(
@@ -55,6 +99,7 @@ class InChatScreen extends StatelessWidget {
                 horizontalSpace(8),
                 Expanded(
                   child: AppTextFormField(
+                    focusNode: focusNode,
                     hintText: 'Type a message...',
                     hintStyle: TextStyle(
                       color: ColorsManager.offWhite,
@@ -68,11 +113,13 @@ class InChatScreen extends StatelessWidget {
                 ),
                 horizontalSpace(16),
                 GestureDetector(
-                  onTap: () {
+                  onTap: () async {
                     if (_messageController.text.isNotEmpty) {
-                      sendMessage(receiverId, _messageController.text);
+                      await sendMessage(widget.receiverId, _messageController.text);
                       _messageController.clear();
                     }
+
+                    scrollDown();
                   },
                   child: const Icon(
                     IconBroken.Send,
@@ -84,6 +131,47 @@ class InChatScreen extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildMessageList() {
+    String senderId = FirebaseAuth.instance.currentUser!.uid;
+    return StreamBuilder(
+      stream: getMessages(senderId, widget.receiverId),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        return ListView.builder(
+          controller: scrollController,
+          physics: BouncingScrollPhysics(),
+          itemCount: snapshot.data!.docs.length,
+          itemBuilder: (context, index) {
+            DocumentSnapshot doc = snapshot.data!.docs[index];
+            Message message = Message(
+              message: doc['message'],
+              senderId: doc['senderId'],
+              senderEmail: doc['senderEmail'],
+              receiverId: doc['receiverId'],
+              timestamp: doc['timestamp'],
+            );
+
+            // Determine if the message is sent by the current user
+            bool isSender = message.senderId == senderId;
+
+            if (isSender) {
+              return ChatBubbleSender(message: message.message);
+            } else {
+              return ChatBubbleReceiver(message: message.message);
+            }
+          },
+        );
+      },
     );
   }
 
@@ -123,45 +211,4 @@ class InChatScreen extends StatelessWidget {
         .orderBy('timestamp', descending: false)
         .snapshots();
   }
-
-  Widget _buildMessageList() {
-    String senderId = FirebaseAuth.instance.currentUser!.uid;
-    return StreamBuilder(
-      stream: getMessages(senderId, receiverId),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
-        }
-
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
-        return ListView.builder(
-          itemCount: snapshot.data!.docs.length,
-          itemBuilder: (context, index) {
-            DocumentSnapshot doc = snapshot.data!.docs[index];
-            Message message = Message(
-              message: doc['message'],
-              senderId: doc['senderId'],
-              senderEmail: doc['senderEmail'],
-              receiverId: doc['receiverId'],
-              timestamp: doc['timestamp'],
-            );
-
-            // Determine if the message is sent by the current user
-            bool isSender = message.senderId == senderId;
-
-            if (isSender) {
-              return ChatBubbleSender(message: message.message);
-            } else {
-              return ChatBubbleReceiver(message: message.message);
-            }
-          },
-        );
-      },
-    );
-  }
-
-
 }

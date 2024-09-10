@@ -18,6 +18,7 @@ class AppTextFormField extends StatelessWidget {
   final bool? autoFocus;
   final String? Function(String?)? validator;
   final bool? readOnly;
+  final FocusNode? focusNode;
 
   const AppTextFormField({
     super.key,
@@ -36,6 +37,7 @@ class AppTextFormField extends StatelessWidget {
     this.autoFocus,
     this.validator,
     this.readOnly,
+    this.focusNode,
   });
 
   @override
@@ -90,6 +92,7 @@ class AppTextFormField extends StatelessWidget {
       cursorHeight: 20.h,
       autofocus: autoFocus ?? false,
       readOnly: readOnly ?? false,
+      focusNode: focusNode,
     );
   }
 }

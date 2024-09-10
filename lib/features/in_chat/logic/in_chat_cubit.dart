@@ -7,4 +7,6 @@ import 'package:link_up/features/in_chat/logic/in_chat_states.dart';
 class InChatCubit extends Cubit<InChatStates> {
   InChatCubit() : super(InChatInitialState());
 
+
+
 }
