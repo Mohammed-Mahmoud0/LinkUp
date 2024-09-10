@@ -3,13 +3,17 @@ class UserModel {
   final String email;
   final String phone;
 
-  UserModel(this.name, this.email, this.phone);
+  UserModel({
+    required this.name,
+    required this.email,
+    required this.phone,
+  });
 
   factory UserModel.fromJson(json) {
     return UserModel(
-      json['name'],
-      json['email'],
-      json['phone'],
+      name: json['name'],
+      email: json['email'],
+      phone: json['phone'],
     );
   }
 }

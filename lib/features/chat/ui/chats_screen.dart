@@ -24,17 +24,6 @@ class ChatsScreen extends StatelessWidget {
             children: [
               // Search bar
               AppTextFormField(
-                backgroundColor: ColorsManager.dark,
-                contentPadding: EdgeInsets.symmetric(
-                  horizontal: 16.w,
-                  vertical: 12.h,
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(4.r),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(4.r),
-                ),
                 hintText: 'Search',
                 hintStyle: TextStyle(
                   color: ColorsManager.neutral,
@@ -48,8 +37,6 @@ class ChatsScreen extends StatelessWidget {
                 ),
               ),
               verticalSpace(16.h),
-
-              // BlocBuilder to listen to ChatsCubit
               BlocBuilder<ChatsCubit, ChatsStates>(
                 builder: (context, state) {
                   if (state is ChatsLoadingState) {
@@ -81,8 +68,8 @@ class ChatsScreen extends StatelessWidget {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => InChatScreen(
-                                        userId: user['uid'],
-                                        userName: user['name'],
+                                        receiverId: user['uid'],
+                                        receiverName: user['name'],
                                       ),
                                     ),
                                   );

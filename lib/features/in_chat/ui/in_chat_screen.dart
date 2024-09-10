@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:link_up/core/helpers/spacing.dart';
 import 'package:link_up/core/models/message.dart';
@@ -8,24 +9,21 @@ import 'package:link_up/core/widgets/app_text_form_field.dart';
 import 'package:link_up/features/in_chat/ui/widgets/chat_buble.dart';
 
 class InChatScreen extends StatelessWidget {
-  final String userId;
-  final String userName;
+  final String receiverId;
+  final String receiverName;
   final TextEditingController _messageController = TextEditingController();
-  late final String chatId;
 
   InChatScreen({
     super.key,
-    required this.userId,
-    required this.userName,
-  }) {
-    chatId = createChatId(userId);
-  }
+    required this.receiverId,
+    required this.receiverName,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(userName),
+        title: Text(receiverName),
         backgroundColor: Colors.transparent,
         leading: GestureDetector(
           onTap: () => Navigator.pop(context),
@@ -39,51 +37,15 @@ class InChatScreen extends StatelessWidget {
           Expanded(
             child: Container(
                 color: ColorsManager.dark,
+                width: double.infinity,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: StreamBuilder<QuerySnapshot>(
-                          stream: FirebaseFirestore.instance
-                              .collection('chats')
-                              .doc(chatId)
-                              .collection('messages')
-                              .orderBy('timestamp', descending: false)
-                              .snapshots(),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              final messages = snapshot.data!.docs
-                                  .map((doc) => Message(
-                                        doc['message'],
-                                        doc['senderId'],
-                                      ))
-                                  .toList();
-
-                              return ListView.builder(
-                                itemCount: messages.length,
-                                itemBuilder: (context, index) {
-                                  final message = messages[index];
-                                  if (message.senderId == userId) {
-                                    return ChatBubbleSender(message: message);
-                                  } else {
-                                    return ChatBubbleReceiver(message: message);
-                                  }
-                                },
-                              );
-                            } else {
-                              return Center(child: CircularProgressIndicator());
-                            }
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
+                  child: _buildMessageList(),
                 )),
           ),
           Padding(
             padding: const EdgeInsets.only(
-                left: 8.0, right: 16.0, top: 8.0, bottom: 20.0),
+                left: 12.0, right: 16.0, top: 8.0, bottom: 16.0),
             child: Row(
               children: [
                 Icon(
@@ -106,11 +68,9 @@ class InChatScreen extends StatelessWidget {
                 ),
                 horizontalSpace(16),
                 GestureDetector(
-                  onTap: () async {
+                  onTap: () {
                     if (_messageController.text.isNotEmpty) {
-                      await sendMessage(
-                          chatId, userId, _messageController.text);
-                      print('Message sent: ${_messageController.text}');
+                      sendMessage(receiverId, _messageController.text);
                       _messageController.clear();
                     }
                   },
@@ -127,42 +87,81 @@ class InChatScreen extends StatelessWidget {
     );
   }
 
-  Future<void> sendMessage(
-      String chatId, String senderId, String message) async {
-    FirebaseFirestore.instance
-        .collection('chats')
-        .doc(chatId)
+  Future<void> sendMessage(String receiverId, message) async {
+    final String currentUserId = FirebaseAuth.instance.currentUser!.uid;
+    final String currentUserEmail = FirebaseAuth.instance.currentUser!.email!;
+    final Timestamp timestamp = Timestamp.now();
+
+    Message newMessage = Message(
+      message: message,
+      senderId: currentUserId,
+      senderEmail: currentUserEmail,
+      receiverId: receiverId,
+      timestamp: timestamp,
+    );
+
+    List<String> ids = [currentUserId, receiverId];
+    ids.sort();
+    String chatRoomId = ids.join('_');
+
+    await FirebaseFirestore.instance
+        .collection('chat_rooms')
+        .doc(chatRoomId)
         .collection('messages')
-        .add({
-      'senderId': senderId,
-      'message': message,
-      'timestamp': FieldValue.serverTimestamp(),
-    });
+        .add(newMessage.toMap());
   }
 
-  Future<void> createChat(String user1Id, String user2Id) async {
-    final chatDoc = await FirebaseFirestore.instance
-        .collection('chats')
-        .where('users', arrayContains: user1Id)
-        .where('users', arrayContains: user2Id)
-        .get();
+  Stream<QuerySnapshot> getMessages(String userId, String otherUserId) {
+    List<String> ids = [userId, otherUserId];
+    ids.sort();
+    String chatRoomId = ids.join('_');
 
-    if (chatDoc.docs.isEmpty) {
-      // Create a new chat document
-      await FirebaseFirestore.instance.collection('chats').add({
-        'users': [user1Id, user2Id],
-      });
-    }
+    return FirebaseFirestore.instance
+        .collection('chat_rooms')
+        .doc(chatRoomId)
+        .collection('messages')
+        .orderBy('timestamp', descending: false)
+        .snapshots();
   }
 
+  Widget _buildMessageList() {
+    String senderId = FirebaseAuth.instance.currentUser!.uid;
+    return StreamBuilder(
+      stream: getMessages(senderId, receiverId),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        }
 
-  String createChatId(String otherUserId) {
-    // Create a chatId combining userId and otherUserId in a consistent way
-    if (userId.compareTo(otherUserId) > 0) {
-      return '$userId-$otherUserId';
-    } else {
-      return '$otherUserId-$userId';
-    }
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        return ListView.builder(
+          itemCount: snapshot.data!.docs.length,
+          itemBuilder: (context, index) {
+            DocumentSnapshot doc = snapshot.data!.docs[index];
+            Message message = Message(
+              message: doc['message'],
+              senderId: doc['senderId'],
+              senderEmail: doc['senderEmail'],
+              receiverId: doc['receiverId'],
+              timestamp: doc['timestamp'],
+            );
+
+            // Determine if the message is sent by the current user
+            bool isSender = message.senderId == senderId;
+
+            if (isSender) {
+              return ChatBubbleSender(message: message.message);
+            } else {
+              return ChatBubbleReceiver(message: message.message);
+            }
+          },
+        );
+      },
+    );
   }
+
 
 }
