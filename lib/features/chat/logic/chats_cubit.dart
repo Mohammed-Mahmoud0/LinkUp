@@ -16,11 +16,11 @@ class ChatsCubit extends Cubit<ChatsStates> {
 
       users = snapshot.docs.map((doc) => doc.data()).toList();
 
-      for (int i = 0; i < users.length; i++) {
-        if (users[i]['uid'] == FirebaseAuth.instance.currentUser!.uid) {
-          users.removeAt(i);
-        }
-      }
+      // for (int i = 0; i < users.length; i++) {
+      //   if (users[i]['uid'] == FirebaseAuth.instance.currentUser!.uid) {
+      //     users.removeAt(i);
+      //   }
+      // }
 
       emit(ChatsSuccessLoadedState());
     } catch (e) {

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_up/core/helpers/spacing.dart';
 import 'package:link_up/core/models/message.dart';
 import 'package:link_up/core/theming/colors.dart';
@@ -105,11 +106,18 @@ class _InChatScreenState extends State<InChatScreen> {
                     hintText: 'Type a message...',
                     hintStyle: TextStyle(
                       color: ColorsManager.offWhite,
+                      fontSize: 12.sp,
                     ),
                     controller: _messageController,
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16.r),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16.r),
+                    ),
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 16.w,
+                      vertical: 8.h,
                     ),
                   ),
                 ),
@@ -146,7 +154,11 @@ class _InChatScreenState extends State<InChatScreen> {
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(
+              child: CircularProgressIndicator(
+            backgroundColor: ColorsManager.mainBlue,
+            color: ColorsManager.dark,
+          ));
         }
 
         if (snapshot.data!.docs.isEmpty || !snapshot.hasData) {
@@ -156,7 +168,6 @@ class _InChatScreenState extends State<InChatScreen> {
         // WidgetsBinding.instance.addPostFrameCallback((_) {
         //   scrollDown();
         // });
-
 
         return ListView.builder(
           controller: scrollController,

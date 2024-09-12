@@ -8,12 +8,14 @@ class ChatUserWidget extends StatelessWidget {
   final String userName;
   final String userId;
   final VoidCallback onTap;
+  final String? userImage;
 
   const ChatUserWidget({
     super.key,
     required this.userName,
     required this.userId,
     required this.onTap,
+    this.userImage,
   });
 
   @override
@@ -29,10 +31,16 @@ class ChatUserWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(50.r),
               color: ColorsManager.dark,
             ),
-            child: Icon(
-              IconBroken.Profile,
-              size: 40.sp,
-            ),
+            child: userImage != null
+                ? Image.network(
+                    userImage!,
+                    height: 40.h,
+                    width: 40.h,
+                  )
+                : Icon(
+                    IconBroken.Profile,
+                    size: 40.sp,
+                  ),
           ),
           horizontalSpace(16.w),
           Text(

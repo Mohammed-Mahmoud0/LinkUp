@@ -49,7 +49,7 @@ class SettingsScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       verticalSpace(50.h),
-                      const ProfileImageWidget(),
+                      const ProfileImageWidget(image: 'https://www.pngitem.com/pimgs/m/421-4212266_transparent-default-avatar-png-default-avatar-images-png.png',),
                       verticalSpace(24.h),
                       AppTextFormField(
                         backgroundColor: ColorsManager.dark,

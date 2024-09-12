@@ -1,3 +1,5 @@
+// ignore_for_file: unused_catch_clause
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -66,18 +68,8 @@ class EmailLoginScreen extends StatelessWidget {
                                 color: ColorsManager.offWhite,
                               ),
                               controller: email,
+                              keyboardType: TextInputType.emailAddress,
                               validator: Validators.validateEmail,
-                              backgroundColor: ColorsManager.dark,
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: 16.w,
-                                vertical: 12.h,
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(4.r),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(4.r),
-                              ),
                             ),
                             verticalSpace(18),
                             AppTextFormField(
@@ -94,17 +86,6 @@ class EmailLoginScreen extends StatelessWidget {
                                       ? Icons.visibility_off
                                       : Icons.visibility,
                                 ),
-                              ),
-                              backgroundColor: ColorsManager.dark,
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: 16.w,
-                                vertical: 12.h,
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(4.r),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(4.r),
                               ),
                             ),
                             verticalSpace(24),
@@ -147,7 +128,6 @@ class EmailLoginScreen extends StatelessWidget {
                                 borderRadius: 30.r,
                                 onPressed: () {
                                   if (formKey.currentState!.validate()) {
-                                    // Proceed with the form submission
                                     BlocProvider.of<LoginCubit>(context)
                                         .loginWithEmailAndPassword(
                                             email.text, password.text);

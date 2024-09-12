@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:link_up/core/helpers/spacing.dart';
 import 'package:link_up/core/theming/colors.dart';
 import 'package:link_up/core/theming/icon_broken.dart';
-import 'package:link_up/core/widgets/app_text_form_field.dart';
 import 'package:link_up/features/chat/ui/chats_screen.dart';
 import 'package:link_up/features/settings/settings_screen.dart';
 
@@ -30,7 +28,6 @@ class _ChatsScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -66,8 +63,8 @@ class _ChatsScreenState extends State<HomeScreen> {
           color: ColorsManager.backgroundDark.withOpacity(0.8),
           boxShadow: const [
             BoxShadow(
-              color: ColorsManager.dark,
-              blurRadius: 10.0,
+              // color: ColorsManager.dark,
+              blurRadius: 1.0,
               offset: Offset(0, -2),
             ),
           ],

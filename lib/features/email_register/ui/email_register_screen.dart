@@ -90,6 +90,7 @@ class EmailRegisterScreen extends StatelessWidget {
                             AppTextFormField(
                               hintText: 'Email',
                               controller: email,
+                              keyboardType: TextInputType.emailAddress,
                               validator: Validators.validateEmail,
                             ),
                             verticalSpace(18),
@@ -118,6 +119,7 @@ class EmailRegisterScreen extends StatelessWidget {
                             if (state is! RegisterLoadingState)
                               AppTextButton(
                                 buttonText: 'Create Account',
+                                borderRadius: 30.r,
                                 textStyle: TextStyles.font16whitesemibold,
                                 onPressed: () {
                                   if (formKey.currentState!.validate()) {
