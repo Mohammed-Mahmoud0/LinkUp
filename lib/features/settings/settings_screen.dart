@@ -49,7 +49,7 @@ class SettingsScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       verticalSpace(50.h),
-                      const ProfileImageWidget(image: 'https://www.pngitem.com/pimgs/m/421-4212266_transparent-default-avatar-png-default-avatar-images-png.png',),
+                      ProfileImageWidget(),
                       verticalSpace(24.h),
                       AppTextFormField(
                         backgroundColor: ColorsManager.dark,
@@ -143,7 +143,8 @@ class SettingsScreen extends StatelessWidget {
                         borderRadius: 30.r,
                         onPressed: () async {
                           await FirebaseAuth.instance.signOut();
-                          Navigator.pushReplacementNamed(context, '/email_login');
+                          Navigator.pushReplacementNamed(
+                              context, '/email_login');
                         },
                       ),
                     ],
@@ -157,4 +158,3 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 }
-
