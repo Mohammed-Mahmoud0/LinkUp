@@ -62,6 +62,7 @@ class ChatsScreen extends StatelessWidget {
                               ChatUserWidget(
                                 userName: user['name'],
                                 userId: user['uid'],
+                                userImage: user['profileImage'],
                                 onTap: () {
                                   Navigator.push(
                                     context,

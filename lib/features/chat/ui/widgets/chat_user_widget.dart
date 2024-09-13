@@ -24,24 +24,21 @@ class ChatUserWidget extends StatelessWidget {
       onTap: onTap,
       child: Row(
         children: [
-          Container(
-            height: 64.h,
-            width: 64.w,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(50.r),
-              color: ColorsManager.dark,
-            ),
-            child: userImage != null
-                ? Image.network(
-                    userImage!,
-                    height: 40.h,
-                    width: 40.h,
-                  )
-                : Icon(
+          userImage != null
+              ? CircleAvatar(
+                  backgroundColor: ColorsManager.dark,
+                  backgroundImage: NetworkImage(userImage!),
+                  radius: 32.r,
+                )
+              : CircleAvatar(
+                  backgroundColor: ColorsManager.dark,
+                  radius: 32.r,
+                  child: Icon(
                     IconBroken.Profile,
                     size: 40.sp,
+                    color: ColorsManager.offWhite,
                   ),
-          ),
+                ),
           horizontalSpace(16.w),
           Text(
             userName,

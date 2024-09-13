@@ -106,19 +106,13 @@ class _InChatScreenState extends State<InChatScreen> {
                     hintText: 'Type a message...',
                     hintStyle: TextStyle(
                       color: ColorsManager.offWhite,
-                      fontSize: 12.sp,
+                      fontSize: 13.sp,
+                    ),
+                    inputTextStyle: TextStyle(
+                      color: ColorsManager.offWhite,
+                      fontSize: 16.sp,
                     ),
                     controller: _messageController,
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16.r),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16.r),
-                    ),
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: 16.w,
-                      vertical: 8.h,
-                    ),
                   ),
                 ),
                 horizontalSpace(16),
