@@ -23,3 +23,15 @@ class UpdateUserDataErrorState extends SettingsStates {
 
   UpdateUserDataErrorState(this.error);
 }
+
+class UpdateProfileImageSuccessState extends SettingsStates {
+  final String message;
+
+  UpdateProfileImageSuccessState(this.message);
+}
+
+class UpdateProfileImageErrorState extends SettingsStates {
+  final String error;
+
+  UpdateProfileImageErrorState(this.error);
+}
