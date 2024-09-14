@@ -15,7 +15,7 @@ class ChatsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ChatsCubit()..getChats(),
+      create: (context) => ChatsCubit()..getChatsUsers(),
       child: Scaffold(
         body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -39,11 +39,9 @@ class ChatsScreen extends StatelessWidget {
               BlocBuilder<ChatsCubit, ChatsStates>(
                 builder: (context, state) {
                   if (state is ChatsLoadingState) {
-                    return Center(
-                      child: const CircularProgressIndicator(
-                        backgroundColor: ColorsManager.mainBlue,
-                        color: ColorsManager.dark,
-                      ),
+                    return const CircularProgressIndicator(
+                      backgroundColor: ColorsManager.mainBlue,
+                      color: ColorsManager.dark,
                     );
                   } else if (state is ChatsSuccessLoadedState) {
                     var users = context.read<ChatsCubit>().users;
@@ -53,32 +51,40 @@ class ChatsScreen extends StatelessWidget {
                     }
 
                     return Expanded(
-                      child: ListView.builder(
-                        itemCount: users.length,
-                        itemBuilder: (context, index) {
-                          var user = users[index];
-                          return Column(
-                            children: [
-                              ChatUserWidget(
-                                userName: user['name'],
-                                userId: user['uid'],
-                                userImage: user['profileImage'],
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => InChatScreen(
-                                        receiverId: user['uid'],
-                                        receiverName: user['name'],
+                      child: RefreshIndicator(
+                        color: ColorsManager.mainBlue,
+                        backgroundColor: ColorsManager.backgroundDark,
+                        onRefresh: () =>
+                            context.read<ChatsCubit>().refreshChatUsers(),
+                        child: ListView.builder(
+                          physics: const BouncingScrollPhysics(
+                              parent: AlwaysScrollableScrollPhysics()),
+                          itemCount: users.length,
+                          itemBuilder: (context, index) {
+                            var user = users[index];
+                            return Column(
+                              children: [
+                                ChatUserWidget(
+                                  userName: user['name'],
+                                  userId: user['uid'],
+                                  userImage: user['profileImage'],
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => InChatScreen(
+                                          receiverId: user['uid'],
+                                          receiverName: user['name'],
+                                        ),
                                       ),
-                                    ),
-                                  );
-                                },
-                              ),
-                              verticalSpace(16.h),
-                            ],
-                          );
-                        },
+                                    );
+                                  },
+                                ),
+                                verticalSpace(16.h),
+                              ],
+                            );
+                          },
+                        ),
                       ),
                     );
                   } else if (state is ChatsErrorState) {

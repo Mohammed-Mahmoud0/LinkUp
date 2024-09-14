@@ -6,7 +6,7 @@ import 'package:link_up/core/theming/colors.dart';
 import 'package:link_up/features/chat/ui/chats_screen.dart';
 import 'package:link_up/features/email_login/ui/email_login_screen.dart';
 import 'package:link_up/features/email_register/ui/email_register_screen.dart';
-import 'package:link_up/features/home/home_screen.dart';
+import 'package:link_up/features/home/ui/home_screen.dart';
 import 'package:link_up/features/onboarding/onboarding_screen.dart';
 import 'package:link_up/features/phone_login/phone_login_screen.dart';
 import 'package:link_up/features/phone_verfication/phone_verfication_screen.dart';
@@ -69,7 +69,7 @@ class LinkUp extends StatelessWidget {
                 '/profile': (context) => const ProfileScreen(),
                 '/chats': (context) => const ChatsScreen(),
                 '/settings': (context) => const SettingsScreen(),
-                '/home': (context) => const HomeScreen(),
+                '/home': (context) => HomeScreen(),
               },
               initialRoute: snapshot.data ?? '/onboarding',
             );

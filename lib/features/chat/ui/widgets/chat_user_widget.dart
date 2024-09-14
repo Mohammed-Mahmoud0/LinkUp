@@ -21,6 +21,8 @@ class ChatUserWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      splashColor: Colors.transparent,
+      splashFactory: NoSplash.splashFactory,
       onTap: onTap,
       child: Row(
         children: [

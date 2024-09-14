@@ -8,23 +8,30 @@ class ChatsCubit extends Cubit<ChatsStates> {
 
   List<Map<String, dynamic>> users = [];
 
-  void getChats() async {
+  Future<void> _getChatUsers({bool showLoading = true}) async {
     try {
-      emit(ChatsLoadingState());
+      if (showLoading) {
+        emit(ChatsLoadingState());
+      }
 
       var snapshot = await FirebaseFirestore.instance.collection('users').get();
 
       users = snapshot.docs.map((doc) => doc.data()).toList();
 
-      // for (int i = 0; i < users.length; i++) {
-      //   if (users[i]['uid'] == FirebaseAuth.instance.currentUser!.uid) {
-      //     users.removeAt(i);
-      //   }
-      // }
+      users.removeWhere(
+          (user) => user['uid'] == FirebaseAuth.instance.currentUser!.uid);
 
       emit(ChatsSuccessLoadedState());
     } catch (e) {
       emit(ChatsErrorState(error: e.toString()));
     }
+  }
+
+  void getChatsUsers() async {
+    await _getChatUsers(showLoading: true);
+  }
+
+  Future<void> refreshChatUsers() async {
+    await _getChatUsers(showLoading: false);
   }
 }
