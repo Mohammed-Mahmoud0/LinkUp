@@ -16,9 +16,10 @@ class AppTextFormField extends StatelessWidget {
   final TextEditingController? controller;
   final TextInputType? keyboardType;
   final bool? autoFocus;
-  final String? Function(String?)? validator;
   final bool? readOnly;
   final FocusNode? focusNode;
+  final String? Function(String?)? validator;
+  final Function(String)? onChanged;
 
   const AppTextFormField({
     super.key,
@@ -35,9 +36,10 @@ class AppTextFormField extends StatelessWidget {
     this.controller,
     this.keyboardType,
     this.autoFocus,
-    this.validator,
     this.readOnly,
     this.focusNode,
+    this.validator,
+    this.onChanged,
   });
 
   @override
@@ -45,6 +47,7 @@ class AppTextFormField extends StatelessWidget {
     return TextFormField(
       controller: controller,
       validator: validator,
+      onChanged: onChanged,
       decoration: InputDecoration(
         isDense: true,
         contentPadding: contentPadding ??
