@@ -31,7 +31,8 @@ class HomeScreen extends StatelessWidget {
                   selectedIndex == 0 ? 'Chats' : 'Settings',
                   style: TextStyle(
                     color: ColorsManager.offWhite,
-                    fontSize: 24.sp,
+                    fontSize: 28.sp,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               );

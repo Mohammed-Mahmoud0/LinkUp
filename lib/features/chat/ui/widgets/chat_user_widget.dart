@@ -30,11 +30,11 @@ class ChatUserWidget extends StatelessWidget {
               ? CircleAvatar(
                   backgroundColor: ColorsManager.dark,
                   backgroundImage: NetworkImage(userImage!),
-                  radius: 32.r,
+                  radius: 28.r,
                 )
               : CircleAvatar(
                   backgroundColor: ColorsManager.dark,
-                  radius: 32.r,
+                  radius: 28.r,
                   child: Icon(
                     IconBroken.Profile,
                     size: 40.sp,

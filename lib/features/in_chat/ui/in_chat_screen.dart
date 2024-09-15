@@ -12,11 +12,13 @@ import 'package:link_up/features/in_chat/ui/widgets/chat_buble.dart';
 class InChatScreen extends StatefulWidget {
   final String receiverId;
   final String receiverName;
+  final String? receiverImage;
 
   InChatScreen({
     super.key,
     required this.receiverId,
     required this.receiverName,
+    this.receiverImage,
   });
 
   @override
@@ -69,7 +71,33 @@ class _InChatScreenState extends State<InChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.receiverName),
+        title: Row(
+          children: [
+            widget.receiverImage != null
+                ? CircleAvatar(
+                    backgroundColor: ColorsManager.dark,
+                    backgroundImage: NetworkImage(widget.receiverImage!),
+                    radius: 22.r,
+                  )
+                : CircleAvatar(
+                    backgroundColor: ColorsManager.dark,
+                    radius: 22.r,
+                    child: Icon(
+                      IconBroken.Profile,
+                      size: 24.sp,
+                      color: ColorsManager.offWhite,
+                    ),
+                  ),
+            horizontalSpace(10),
+            Text(
+              widget.receiverName,
+              style: TextStyle(
+                color: ColorsManager.offWhite,
+                fontSize: 16.sp,
+              ),
+            ),
+          ],
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: GestureDetector(
@@ -78,6 +106,8 @@ class _InChatScreenState extends State<InChatScreen> {
             Icons.keyboard_arrow_left,
           ),
         ),
+        leadingWidth: 32.w,
+        titleSpacing: 8.w,
       ),
       body: Column(
         children: [

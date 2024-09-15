@@ -35,7 +35,7 @@ class ChatsScreen extends StatelessWidget {
                   size: 24,
                 ),
               ),
-              verticalSpace(16.h),
+              verticalSpace(16),
               BlocBuilder<ChatsCubit, ChatsStates>(
                 builder: (context, state) {
                   if (state is ChatsLoadingState) {
@@ -75,12 +75,13 @@ class ChatsScreen extends StatelessWidget {
                                         builder: (context) => InChatScreen(
                                           receiverId: user['uid'],
                                           receiverName: user['name'],
+                                          receiverImage: user['profileImage'],
                                         ),
                                       ),
                                     );
                                   },
                                 ),
-                                verticalSpace(16.h),
+                                verticalSpace(16),
                               ],
                             );
                           },
