@@ -1,5 +1,4 @@
-import 'dart:developer';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:link_up/features/email_login/logic/login_states.dart';
@@ -15,6 +14,10 @@ class LoginCubit extends Cubit<LoginStates> {
       final credential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
       if (credential.user!.emailVerified) {
+        await FirebaseFirestore.instance
+        .collection('users')
+        .doc(credential.user!.uid)
+        .update({'isVerified': true});
         emit(LoginSuccessState());
       }
       else {

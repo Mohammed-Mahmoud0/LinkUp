@@ -15,13 +15,16 @@ class ChatsCubit extends Cubit<ChatsStates> {
         emit(ChatsLoadingState());
       }
 
-      var snapshot = await FirebaseFirestore.instance.collection('users').get();
+      var snapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .where('isVerified', isEqualTo: true)
+          .get();
 
       users = snapshot.docs.map((doc) => doc.data()).toList();
       filteredUsers = users;
 
-      // users.removeWhere(
-      //     (user) => user['uid'] == FirebaseAuth.instance.currentUser!.uid);
+      users.removeWhere(
+          (user) => user['uid'] == FirebaseAuth.instance.currentUser!.uid);
 
       emit(ChatsSuccessLoadedState());
     } catch (e) {
