@@ -1,4 +1,3 @@
-// ignore_for_file: unused_local_variable
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -21,8 +20,7 @@ class ProfileImageWidget extends StatelessWidget {
 
         return Stack(
           children: [
-            if (state is UpdateProfileImageSuccessState ||
-                cubit.userModel?.profileImage != null)
+            if (cubit.userModel?.profileImage != null)
               CircleAvatar(
                 backgroundColor: ColorsManager.dark,
                 backgroundImage: NetworkImage(cubit.userModel!.profileImage!),
@@ -42,14 +40,19 @@ class ProfileImageWidget extends StatelessWidget {
               bottom: -5,
               right: -5,
               child: IconButton(
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                onPressed: () => selectImage(context, (img) {
-                  BlocProvider.of<SettingsCubit>(context)
-                      .updateProfileImage(img);
-                }),
+                highlightColor: ColorsManager.backgroundDark,
+                onPressed: () {
+                  selectImage(
+                    context,
+                    (img) {
+                      cubit.updateProfileImage(img);
+                    },
+                  );
+                },
                 icon: Icon(
-                  Icons.add_circle,
+                  IconBroken.Edit_Square,
+                  color: ColorsManager.offWhite,
+                  size: 24.sp,
                 ),
               ),
             ),

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_up/core/theming/colors.dart';
-import 'package:link_up/core/theming/icon_broken.dart';
 import 'package:link_up/features/chat/ui/chats_screen.dart';
 import 'package:link_up/features/home/logic/home_cubit.dart';
 import 'package:link_up/features/home/ui/widgets/navigation_bar_widget.dart';
@@ -22,7 +21,6 @@ class HomeScreen extends StatelessWidget {
       create: (context) => HomeCubit(),
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.transparent,
           title: BlocBuilder<HomeCubit, int>(
             builder: (context, selectedIndex) {
               return Padding(

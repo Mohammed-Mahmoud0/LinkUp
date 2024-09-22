@@ -99,7 +99,7 @@ class _InChatScreenState extends State<InChatScreen> {
           ],
         ),
         backgroundColor: Colors.transparent,
-        elevation: 0,
+        elevation: 0.0,
         leading: GestureDetector(
           onTap: () => Navigator.pop(context),
           child: const Icon(

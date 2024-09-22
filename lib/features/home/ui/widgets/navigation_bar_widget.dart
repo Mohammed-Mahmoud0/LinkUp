@@ -10,9 +10,7 @@ class NavigationBarWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Theme(
       data: Theme.of(context).copyWith(
-        splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
-        splashFactory: NoSplash.splashFactory,
       ),
       child: Container(
         decoration: BoxDecoration(

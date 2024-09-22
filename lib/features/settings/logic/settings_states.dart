@@ -35,3 +35,8 @@ class UpdateProfileImageErrorState extends SettingsStates {
 
   UpdateProfileImageErrorState(this.error);
 }
+
+class DeleteProfileImageSuccessState extends SettingsStates {
+  final String message;
+  DeleteProfileImageSuccessState(this.message);
+}

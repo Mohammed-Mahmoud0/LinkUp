@@ -58,18 +58,24 @@ class LinkUp extends StatelessWidget {
               theme: ThemeData(
                 brightness: Brightness.dark,
                 scaffoldBackgroundColor: ColorsManager.backgroundDark,
+                splashColor: Colors.transparent,
+                splashFactory: NoSplash.splashFactory,
+                appBarTheme: AppBarTheme(
+                  backgroundColor: ColorsManager.backgroundDark,
+                  scrolledUnderElevation: 0,
+                ),        
               ),
               debugShowCheckedModeBanner: false,
               routes: {
                 '/onboarding': (context) => const OnboardingScreen(),
-                '/email_login': (context) => EmailLoginScreen(),
                 '/email_register': (context) => EmailRegisterScreen(),
+                '/email_login': (context) => EmailLoginScreen(),
                 '/phone_login': (context) => PhoneLoginScreen(),
                 '/phone_verification': (context) => PhoneVerificationScreen(),
                 '/profile': (context) => const ProfileScreen(),
+                '/home': (context) => HomeScreen(),
                 '/chats': (context) => const ChatsScreen(),
                 '/settings': (context) => const SettingsScreen(),
-                '/home': (context) => HomeScreen(),
               },
               initialRoute: snapshot.data ?? '/onboarding',
             );

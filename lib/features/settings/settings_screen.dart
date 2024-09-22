@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -48,70 +47,27 @@ class SettingsScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      verticalSpace(50.h),
+                      verticalSpace(50),
                       ProfileImageWidget(),
-                      verticalSpace(24.h),
+                      verticalSpace(24),
                       AppTextFormField(
-                        backgroundColor: ColorsManager.dark,
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: 16.w,
-                          vertical: 12.h,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4.r),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4.r),
-                        ),
                         hintText: 'Name',
-                        hintStyle: const TextStyle(
-                          color: ColorsManager.offWhite,
-                        ),
-                        keyboardType: TextInputType.text,
                         controller: nameController,
                       ),
-                      verticalSpace(10.h),
+                      verticalSpace(10),
                       AppTextFormField(
-                        backgroundColor: ColorsManager.dark,
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: 16.w,
-                          vertical: 12.h,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4.r),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4.r),
-                        ),
                         hintText: 'Phone Number',
-                        hintStyle: const TextStyle(
-                          color: ColorsManager.offWhite,
-                        ),
-                        keyboardType: TextInputType.text,
                         controller: phoneController,
+                        keyboardType: TextInputType.number,
                       ),
-                      verticalSpace(10.h),
+                      verticalSpace(10),
                       AppTextFormField(
-                        backgroundColor: ColorsManager.dark,
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: 16.w,
-                          vertical: 12.h,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4.r),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4.r),
-                        ),
                         hintText: 'Email',
-                        hintStyle: const TextStyle(
-                          color: ColorsManager.offWhite,
-                        ),
                         keyboardType: TextInputType.emailAddress,
                         controller: emailController,
                         readOnly: true,
                       ),
-                      verticalSpace(64.h),
+                      verticalSpace(64),
                       if (state is SettingsLoadingState)
                         const CircularProgressIndicator(
                           backgroundColor: ColorsManager.mainBlue,
@@ -132,7 +88,7 @@ class SettingsScreen extends StatelessWidget {
                             );
                           },
                         ),
-                      verticalSpace(24.h),
+                      verticalSpace(24),
                       AppTextButton(
                         buttonText: 'Logout',
                         backgroundColor: Colors.red.shade800,
@@ -142,9 +98,7 @@ class SettingsScreen extends StatelessWidget {
                         ),
                         borderRadius: 30.r,
                         onPressed: () async {
-                          await FirebaseAuth.instance.signOut();
-                          Navigator.pushReplacementNamed(
-                              context, '/email_login');
+                          await cubit.logOut(context);
                         },
                       ),
                     ],
