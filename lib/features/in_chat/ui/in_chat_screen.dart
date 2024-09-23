@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,7 @@ class InChatScreen extends StatefulWidget {
 
 class _InChatScreenState extends State<InChatScreen> {
   final TextEditingController _messageController = TextEditingController();
+  final AudioPlayer audioPlayer = AudioPlayer();
   FocusNode focusNode = FocusNode();
   ScrollController scrollController = ScrollController();
 
@@ -153,6 +155,7 @@ class _InChatScreenState extends State<InChatScreen> {
                           widget.receiverId, _messageController.text);
                       _messageController.clear();
                       scrollDown();
+                      playSendSound();
                     }
                   },
                   child: const Icon(
@@ -210,9 +213,13 @@ class _InChatScreenState extends State<InChatScreen> {
                 receiverId: doc['receiverId'],
                 timestamp: doc['timestamp'],
               );
-          
+
               bool isSender = message.senderId == senderId;
-          
+
+              if (index == snapshot.data!.docs.length - 1 && !isSender) {
+                playReceiveSound();
+              }
+
               if (isSender) {
                 return ChatBubbleSender(message: message.message);
               } else {
@@ -260,5 +267,13 @@ class _InChatScreenState extends State<InChatScreen> {
         .collection('messages')
         .orderBy('timestamp', descending: false)
         .snapshots();
+  }
+
+  void playSendSound() async {
+    await audioPlayer.play(AssetSource('sounds/send.mp3'));
+  }
+
+  void playReceiveSound() async {
+    await audioPlayer.play(AssetSource('sounds/receive.mp3'));
   }
 }
