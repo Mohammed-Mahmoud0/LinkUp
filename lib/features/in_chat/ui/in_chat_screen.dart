@@ -7,7 +7,7 @@ import 'package:link_up/core/models/message.dart';
 import 'package:link_up/core/theming/colors.dart';
 import 'package:link_up/core/theming/icon_broken.dart';
 import 'package:link_up/core/widgets/app_text_form_field.dart';
-import 'package:link_up/features/in_chat/ui/widgets/chat_buble.dart';
+import 'package:link_up/features/in_chat/ui/widgets/chat_bubble.dart';
 
 class InChatScreen extends StatefulWidget {
   final String receiverId;

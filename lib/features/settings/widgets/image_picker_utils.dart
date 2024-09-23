@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:link_up/core/theming/colors.dart';
+import 'package:link_up/core/theming/icon_broken.dart';
 import 'package:link_up/features/settings/logic/settings_cubit.dart';
 
 void selectImage(
@@ -16,7 +17,7 @@ void selectImage(
         child: Wrap(
           children: [
             ListTile(
-              leading: Icon(Icons.camera),
+              leading: Icon(IconBroken.Camera),
               title: Text('Take a photo'),
               onTap: () async {
                 Navigator.of(ctx).pop();
@@ -25,7 +26,7 @@ void selectImage(
               },
             ),
             ListTile(
-              leading: Icon(Icons.photo_library),
+              leading: Icon(IconBroken.Image),
               title: Text('Choose from gallery'),
               onTap: () async {
                 Navigator.of(ctx).pop();
@@ -34,7 +35,7 @@ void selectImage(
               },
             ),
             ListTile(
-              leading: Icon(Icons.delete),
+              leading: Icon(IconBroken.Delete),
               title: Text('Remove Photo'),
               onTap: () async {
                 Navigator.of(ctx).pop();

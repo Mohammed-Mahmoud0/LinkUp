@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:link_up/core/models/message.dart';
 import 'package:link_up/core/theming/colors.dart';
 
 class ChatBubbleSender extends StatelessWidget {

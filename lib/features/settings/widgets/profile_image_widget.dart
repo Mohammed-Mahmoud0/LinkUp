@@ -40,7 +40,7 @@ class ProfileImageWidget extends StatelessWidget {
               bottom: -5,
               right: -5,
               child: IconButton(
-                highlightColor: ColorsManager.backgroundDark,
+                highlightColor: ColorsManager.backgroundDark.withOpacity(0.8),
                 onPressed: () {
                   selectImage(
                     context,
@@ -49,10 +49,17 @@ class ProfileImageWidget extends StatelessWidget {
                     },
                   );
                 },
-                icon: Icon(
-                  IconBroken.Edit_Square,
-                  color: ColorsManager.offWhite,
-                  size: 24.sp,
+                icon: Container(
+                  padding: EdgeInsets.all(5.r),
+                  decoration: BoxDecoration(
+                    color: ColorsManager.backgroundDark.withOpacity(0.8),
+                    borderRadius: BorderRadius.circular(10.r),
+                  ),
+                  child: Icon(
+                    IconBroken.Edit_Square,
+                    color: ColorsManager.offWhite,
+                    size: 20.sp,
+                  ),
                 ),
               ),
             ),
