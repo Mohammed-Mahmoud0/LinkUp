@@ -188,34 +188,34 @@ class _InChatScreenState extends State<InChatScreen> {
         if (snapshot.data!.docs.isEmpty || !snapshot.hasData) {
           return const Center(child: Text('No messages yet...'));
         }
-        //
-        // WidgetsBinding.instance.addPostFrameCallback((_) {
-        //   scrollDown();
-        // });
 
-        return ListView.builder(
+        return Scrollbar(
+          interactive: true,
+          thickness: 1.5.w,
           controller: scrollController,
-          physics: BouncingScrollPhysics(),
-          itemCount: snapshot.data!.docs.length,
-          itemBuilder: (context, index) {
-            DocumentSnapshot doc = snapshot.data!.docs[index];
-            Message message = Message(
-              message: doc['message'],
-              senderId: doc['senderId'],
-              senderEmail: doc['senderEmail'],
-              receiverId: doc['receiverId'],
-              timestamp: doc['timestamp'],
-            );
-
-            // Determine if the message is sent by the current user
-            bool isSender = message.senderId == senderId;
-
-            if (isSender) {
-              return ChatBubbleSender(message: message.message);
-            } else {
-              return ChatBubbleReceiver(message: message.message);
-            }
-          },
+          child: ListView.builder(
+            controller: scrollController,
+            physics: BouncingScrollPhysics(),
+            itemCount: snapshot.data!.docs.length,
+            itemBuilder: (context, index) {
+              DocumentSnapshot doc = snapshot.data!.docs[index];
+              Message message = Message(
+                message: doc['message'],
+                senderId: doc['senderId'],
+                senderEmail: doc['senderEmail'],
+                receiverId: doc['receiverId'],
+                timestamp: doc['timestamp'],
+              );
+          
+              bool isSender = message.senderId == senderId;
+          
+              if (isSender) {
+                return ChatBubbleSender(message: message.message);
+              } else {
+                return ChatBubbleReceiver(message: message.message);
+              }
+            },
+          ),
         );
       },
     );

@@ -23,6 +23,7 @@ class ChatUserWidget extends StatelessWidget {
     return InkWell(
       splashColor: Colors.transparent,
       splashFactory: NoSplash.splashFactory,
+      highlightColor: ColorsManager.dark,
       onTap: onTap,
       child: Row(
         children: [
