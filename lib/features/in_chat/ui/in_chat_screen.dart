@@ -189,6 +189,10 @@ class _InChatScreenState extends State<InChatScreen> {
           return const Center(child: Text('No messages yet...'));
         }
 
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          scrollDown();
+        });
+
         return Scrollbar(
           interactive: true,
           thickness: 1.5.w,
