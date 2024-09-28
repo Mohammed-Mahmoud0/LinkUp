@@ -9,7 +9,7 @@ import 'package:link_up/features/email_register/ui/email_register_screen.dart';
 import 'package:link_up/features/home/ui/home_screen.dart';
 import 'package:link_up/features/onboarding/onboarding_screen.dart';
 import 'package:link_up/features/phone_login/phone_login_screen.dart';
-import 'package:link_up/features/phone_verfication/phone_verfication_screen.dart';
+import 'package:link_up/features/phone_verification/phone_verification_screen.dart';
 import 'package:link_up/features/profile/profile_screen.dart';
 import 'package:link_up/features/settings/settings_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -63,7 +63,7 @@ class LinkUp extends StatelessWidget {
                 appBarTheme: AppBarTheme(
                   backgroundColor: ColorsManager.backgroundDark,
                   scrolledUnderElevation: 0,
-                ),        
+                ),
               ),
               debugShowCheckedModeBanner: false,
               routes: {

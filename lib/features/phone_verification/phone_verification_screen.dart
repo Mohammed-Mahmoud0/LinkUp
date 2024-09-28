@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_up/core/helpers/spacing.dart';
 import 'package:link_up/core/theming/colors.dart';
-import 'package:link_up/features/phone_verfication/widgets/otp_input.dart';
+import 'package:link_up/features/phone_verification/widgets/otp_input.dart';
 
 class PhoneVerificationScreen extends StatelessWidget {
   final TextEditingController otpController = TextEditingController();

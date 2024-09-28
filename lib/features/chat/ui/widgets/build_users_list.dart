@@ -5,6 +5,7 @@ import 'package:link_up/core/theming/colors.dart';
 import 'package:link_up/features/chat/logic/chats_cubit.dart';
 import 'package:link_up/features/chat/logic/chats_states.dart';
 import 'package:link_up/features/chat/ui/widgets/chat_user_widget.dart';
+import 'package:link_up/features/in_chat/logic/in_chat_cubit.dart';
 import 'package:link_up/features/in_chat/ui/in_chat_screen.dart';
 
 Widget buildUsersList(BuildContext context) {
@@ -58,10 +59,13 @@ Widget buildUsersList(BuildContext context) {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => InChatScreen(
-                                receiverId: user['uid'],
-                                receiverName: user['name'],
-                                receiverImage: user['profileImage'],
+                              builder: (context) => BlocProvider(
+                                create: (context) => InChatCubit(),
+                                child: InChatScreen(
+                                  receiverId: user['uid'],
+                                  receiverName: user['name'],
+                                  receiverImage: user['profileImage'],
+                                ),
                               ),
                             ),
                           );

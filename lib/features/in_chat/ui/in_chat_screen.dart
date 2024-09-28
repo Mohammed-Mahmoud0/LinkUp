@@ -1,14 +1,15 @@
 import 'package:audioplayers/audioplayers.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_up/core/helpers/spacing.dart';
-import 'package:link_up/core/models/message.dart';
 import 'package:link_up/core/theming/colors.dart';
 import 'package:link_up/core/theming/icon_broken.dart';
 import 'package:link_up/core/widgets/app_text_form_field.dart';
-import 'package:link_up/features/in_chat/ui/widgets/chat_bubble.dart';
+import 'package:link_up/features/in_chat/logic/in_chat_cubit.dart';
+import 'package:link_up/features/in_chat/logic/in_chat_states.dart';
+import 'package:link_up/features/in_chat/ui/widgets/in_chat_app_bar.dart';
+import 'package:link_up/features/in_chat/ui/widgets/message_list.dart';
 
 class InChatScreen extends StatefulWidget {
   final String receiverId;
@@ -36,6 +37,10 @@ class _InChatScreenState extends State<InChatScreen> {
   void initState() {
     super.initState();
 
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      scrollDown();
+    });
+
     focusNode.addListener(() {
       if (focusNode.hasFocus) {
         Future.delayed(
@@ -44,73 +49,28 @@ class _InChatScreenState extends State<InChatScreen> {
         );
       }
     });
-
-    Future.delayed(
-      Duration(milliseconds: 500),
-      () => scrollDown(),
-    );
   }
 
   @override
   void dispose() {
-    super.dispose();
-
     focusNode.dispose();
     _messageController.dispose();
+    super.dispose();
   }
 
   void scrollDown() {
     if (scrollController.hasClients) {
-      scrollController.animateTo(
+      scrollController.jumpTo(
         scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.easeOut,
       );
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    var cubit = InChatCubit.get(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          children: [
-            widget.receiverImage != null
-                ? CircleAvatar(
-                    backgroundColor: ColorsManager.dark,
-                    backgroundImage: NetworkImage(widget.receiverImage!),
-                    radius: 22.r,
-                  )
-                : CircleAvatar(
-                    backgroundColor: ColorsManager.dark,
-                    radius: 22.r,
-                    child: Icon(
-                      IconBroken.Profile,
-                      size: 24.sp,
-                      color: ColorsManager.offWhite,
-                    ),
-                  ),
-            horizontalSpace(10),
-            Text(
-              widget.receiverName,
-              style: TextStyle(
-                color: ColorsManager.offWhite,
-                fontSize: 16.sp,
-              ),
-            ),
-          ],
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        leading: GestureDetector(
-          onTap: () => Navigator.pop(context),
-          child: const Icon(
-            Icons.keyboard_arrow_left,
-          ),
-        ),
-        leadingWidth: 32.w,
-        titleSpacing: 8.w,
-      ),
+      appBar: inChatAppBar(context, widget.receiverName, widget.receiverImage),
       body: Column(
         children: [
           Expanded(
@@ -119,7 +79,7 @@ class _InChatScreenState extends State<InChatScreen> {
                 width: double.infinity,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: _buildMessageList(),
+                  child: MessageList(widget.receiverId, scrollController),
                 )),
           ),
           Padding(
@@ -147,21 +107,33 @@ class _InChatScreenState extends State<InChatScreen> {
                     controller: _messageController,
                   ),
                 ),
-                horizontalSpace(16),
-                GestureDetector(
-                  onTap: () async {
-                    if (_messageController.text.isNotEmpty) {
-                      await sendMessage(
-                          widget.receiverId, _messageController.text);
-                      _messageController.clear();
-                      scrollDown();
-                      playSendSound();
-                    }
+                horizontalSpace(8),
+                BlocBuilder<InChatCubit, InChatStates>(
+                  builder: (context, state) {
+                    return GestureDetector(
+                      onTap: () async {
+                        if (_messageController.text.isNotEmpty) {
+                          await cubit.sendMessage(
+                              widget.receiverId, _messageController.text);
+                          _messageController.clear();
+                          cubit.scrollDown(scrollController);
+                          cubit.playSendSound();
+                        }
+                      },
+                      child: Container(
+                        height: 40.h,
+                        width: 40.w,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: ColorsManager.dark,
+                        ),
+                        child: const Icon(
+                          IconBroken.Send,
+                          color: ColorsManager.mainBlue,
+                        ),
+                      ),
+                    );
                   },
-                  child: const Icon(
-                    IconBroken.Send,
-                    color: ColorsManager.mainBlue,
-                  ),
                 ),
               ],
             ),
@@ -169,111 +141,5 @@ class _InChatScreenState extends State<InChatScreen> {
         ],
       ),
     );
-  }
-
-  Widget _buildMessageList() {
-    String senderId = FirebaseAuth.instance.currentUser!.uid;
-    return StreamBuilder(
-      stream: getMessages(senderId, widget.receiverId),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
-        }
-
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-              child: CircularProgressIndicator(
-            backgroundColor: ColorsManager.mainBlue,
-            color: ColorsManager.dark,
-          ));
-        }
-
-        if (snapshot.data!.docs.isEmpty || !snapshot.hasData) {
-          return const Center(child: Text('No messages yet...'));
-        }
-
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          scrollDown();
-        });
-
-        return Scrollbar(
-          interactive: true,
-          thickness: 1.5.w,
-          controller: scrollController,
-          child: ListView.builder(
-            controller: scrollController,
-            physics: BouncingScrollPhysics(),
-            itemCount: snapshot.data!.docs.length,
-            itemBuilder: (context, index) {
-              DocumentSnapshot doc = snapshot.data!.docs[index];
-              Message message = Message(
-                message: doc['message'],
-                senderId: doc['senderId'],
-                senderEmail: doc['senderEmail'],
-                receiverId: doc['receiverId'],
-                timestamp: doc['timestamp'],
-              );
-
-              bool isSender = message.senderId == senderId;
-
-              if (index == snapshot.data!.docs.length - 1 && !isSender) {
-                playReceiveSound();
-              }
-
-              if (isSender) {
-                return ChatBubbleSender(message: message.message);
-              } else {
-                return ChatBubbleReceiver(message: message.message);
-              }
-            },
-          ),
-        );
-      },
-    );
-  }
-
-  Future<void> sendMessage(String receiverId, message) async {
-    final String currentUserId = FirebaseAuth.instance.currentUser!.uid;
-    final String currentUserEmail = FirebaseAuth.instance.currentUser!.email!;
-    final Timestamp timestamp = Timestamp.now();
-
-    Message newMessage = Message(
-      message: message,
-      senderId: currentUserId,
-      senderEmail: currentUserEmail,
-      receiverId: receiverId,
-      timestamp: timestamp,
-    );
-
-    List<String> ids = [currentUserId, receiverId];
-    ids.sort();
-    String chatRoomId = ids.join('_');
-
-    await FirebaseFirestore.instance
-        .collection('chat_rooms')
-        .doc(chatRoomId)
-        .collection('messages')
-        .add(newMessage.toMap());
-  }
-
-  Stream<QuerySnapshot> getMessages(String userId, String otherUserId) {
-    List<String> ids = [userId, otherUserId];
-    ids.sort();
-    String chatRoomId = ids.join('_');
-
-    return FirebaseFirestore.instance
-        .collection('chat_rooms')
-        .doc(chatRoomId)
-        .collection('messages')
-        .orderBy('timestamp', descending: false)
-        .snapshots();
-  }
-
-  void playSendSound() async {
-    await audioPlayer.play(AssetSource('sounds/send.mp3'));
-  }
-
-  void playReceiveSound() async {
-    await audioPlayer.play(AssetSource('sounds/receive.mp3'));
   }
 }
