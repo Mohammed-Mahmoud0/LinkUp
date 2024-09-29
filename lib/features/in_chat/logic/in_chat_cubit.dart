@@ -11,11 +11,11 @@ class InChatCubit extends Cubit<InChatStates> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final AudioPlayer _audioPlayer = AudioPlayer();
 
-  InChatCubit() : super(InChatInitialState());
-
   static InChatCubit get(context) => BlocProvider.of(context);
 
   String get currentUserId => _auth.currentUser?.uid ?? '';
+
+  InChatCubit() : super(InChatInitialState());
 
   Future<void> sendMessage(String receiverId, message) async {
     final String currentUserId = _auth.currentUser!.uid;
@@ -53,6 +53,10 @@ class InChatCubit extends Cubit<InChatStates> {
         .collection('messages')
         .orderBy('timestamp', descending: false)
         .snapshots();
+  }
+
+  bool isSender(Message message) {
+    return message.senderId == _auth.currentUser!.uid;
   }
 
   void playSendSound() async {

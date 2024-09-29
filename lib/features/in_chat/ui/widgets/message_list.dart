@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,6 +10,8 @@ import 'package:link_up/features/in_chat/ui/widgets/chat_bubble.dart';
 
 Widget MessageList(receiverId, scrollController) {
   bool isInitialLoad = true;
+  // ignore: unused_local_variable
+  bool lastMessageIsReceived = false;
   return BlocBuilder<InChatCubit, InChatStates>(
     builder: (context, state) {
       var cubit = InChatCubit.get(context);
@@ -23,15 +24,27 @@ Widget MessageList(receiverId, scrollController) {
 
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
-                child: CircularProgressIndicator(
-              backgroundColor: ColorsManager.mainBlue,
-              color: ColorsManager.dark,
-            ));
+              child: CircularProgressIndicator(
+                backgroundColor: ColorsManager.mainBlue,
+                color: ColorsManager.dark,
+              ),
+            );
           }
 
           if (snapshot.data!.docs.isEmpty || !snapshot.hasData) {
-            return const Center(child: Text('No messages yet...'));
+            return const Center(child: Text('Start Chatting now ...'));
           }
+
+          DocumentSnapshot lastDoc = snapshot.data!.docs.last;
+          Message lastMessage =
+              Message.fromMap(lastDoc.data() as Map<String, dynamic>);
+          bool isSender = cubit.isSender(lastMessage);
+
+          if (!isInitialLoad && !isSender) {
+            cubit.playReceiveSound();
+          }
+
+          lastMessageIsReceived = !isSender;
 
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (isInitialLoad) {
@@ -55,12 +68,7 @@ Widget MessageList(receiverId, scrollController) {
                 Message message =
                     Message.fromMap(doc.data() as Map<String, dynamic>);
 
-                String senderId = FirebaseAuth.instance.currentUser!.uid;
-                bool isSender = message.senderId == senderId;
-
-                if (index == snapshot.data!.docs.length - 1 && !isSender) {
-                  cubit.playReceiveSound();
-                }
+                bool isSender = cubit.isSender(message);
 
                 if (isSender) {
                   return ChatBubbleSender(message: message.message);
