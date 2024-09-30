@@ -7,24 +7,38 @@ import 'package:link_up/features/chat/logic/chats_cubit.dart';
 import 'package:link_up/features/chat/logic/chats_states.dart';
 
 Widget buildSearchField(BuildContext context) {
-    return BlocBuilder<ChatsCubit, ChatsStates>(
-      builder: (context, state) {
-        return AppTextFormField(
-          hintText: 'Search',
-          hintStyle: TextStyle(
-            color: ColorsManager.neutral,
-            fontSize: 16.sp,
+  return BlocBuilder<ChatsCubit, ChatsStates>(
+    builder: (context, state) {
+      return AppTextFormField(
+        hintText: 'Search',
+        hintStyle: TextStyle(
+          color: ColorsManager.neutral,
+          fontSize: 16.sp,
+        ),
+        keyboardType: TextInputType.text,
+        prefixIcon: const Icon(
+          Icons.search,
+          color: ColorsManager.neutral,
+          size: 24,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(
+            12.r,
           ),
-          keyboardType: TextInputType.text,
-          prefixIcon: const Icon(
-            Icons.search,
-            color: ColorsManager.neutral,
-            size: 24,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(
+            12.r,
           ),
-          onChanged: (query) {
-            context.read<ChatsCubit>().searchUsers(query);
-          },
-        );
-      },
-    );
-  }
+        ),
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: 16.w,
+          vertical: 8.h,
+        ),
+        onChanged: (query) {
+          context.read<ChatsCubit>().searchUsers(query);
+        },
+      );
+    },
+  );
+}

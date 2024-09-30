@@ -83,15 +83,17 @@ class _InChatScreenState extends State<InChatScreen> {
                 )),
           ),
           Padding(
-            padding: const EdgeInsets.only(
-                left: 12.0, right: 16.0, top: 8.0, bottom: 16.0),
+            padding: const EdgeInsets.only(right: 8.0, top: 8.0, bottom: 8.0),
             child: Row(
               children: [
-                Icon(
-                  Icons.add,
-                  color: ColorsManager.offWhite,
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.add,
+                    color: ColorsManager.mainBlue,
+                    size: 24.sp,
+                  ),
                 ),
-                horizontalSpace(8),
                 Expanded(
                   child: AppTextFormField(
                     focusNode: focusNode,
@@ -99,6 +101,20 @@ class _InChatScreenState extends State<InChatScreen> {
                     hintStyle: TextStyle(
                       color: ColorsManager.offWhite,
                       fontSize: 13.sp,
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(
+                        25.r,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(
+                        25.r,
+                      ),
+                    ),
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 16.w,
+                      vertical: 8.h,
                     ),
                     inputTextStyle: TextStyle(
                       color: ColorsManager.offWhite,
@@ -108,30 +124,46 @@ class _InChatScreenState extends State<InChatScreen> {
                   ),
                 ),
                 horizontalSpace(8),
-                BlocBuilder<InChatCubit, InChatStates>(
-                  builder: (context, state) {
-                    return GestureDetector(
-                      onTap: () async {
-                        if (_messageController.text.isNotEmpty) {
-                          await cubit.sendMessage(
-                              widget.receiverId, _messageController.text);
-                          _messageController.clear();
-                          cubit.scrollDown(scrollController);
-                          cubit.playSendSound();
-                        }
+                ValueListenableBuilder(
+                  valueListenable: _messageController,
+                  builder: (context, TextEditingValue value, __) {
+                    return AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 200),
+                      transitionBuilder:
+                          (Widget child, Animation<double> animation) {
+                        return FadeTransition(opacity: animation, child: child);
                       },
-                      child: Container(
-                        height: 40.h,
-                        width: 40.w,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: ColorsManager.dark,
-                        ),
-                        child: const Icon(
-                          IconBroken.Send,
-                          color: ColorsManager.mainBlue,
-                        ),
-                      ),
+                      child: value.text.isNotEmpty
+                          ? BlocBuilder<InChatCubit, InChatStates>(
+                              builder: (context, state) {
+                                return Container(
+                                  key: ValueKey('sendButton'),
+                                  height: 40.h,
+                                  width: 40.w,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: ColorsManager.dark,
+                                  ),
+                                  child: IconButton(
+                                    onPressed: () async {
+                                      if (_messageController.text.isNotEmpty) {
+                                        await cubit.sendMessage(
+                                            widget.receiverId,
+                                            _messageController.text);
+                                        _messageController.clear();
+                                        cubit.scrollDown(scrollController);
+                                        cubit.playSendSound();
+                                      }
+                                    },
+                                    icon: Icon(IconBroken.Send),
+                                    color: ColorsManager.mainBlue,
+                                  ),
+                                );
+                              },
+                            )
+                          : SizedBox(
+                              key: ValueKey('emptyWidget'),
+                            ),
                     );
                   },
                 ),

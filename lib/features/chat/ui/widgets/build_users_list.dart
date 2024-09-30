@@ -49,29 +49,25 @@ Widget buildUsersList(BuildContext context) {
                 itemCount: filteredUsers.length,
                 itemBuilder: (context, index) {
                   var user = filteredUsers[index];
-                  return Column(
-                    children: [
-                      ChatUserWidget(
-                        userName: user['name'],
-                        userId: user['uid'],
-                        userImage: user['profileImage'],
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => BlocProvider(
-                                create: (context) => InChatCubit(),
-                                child: InChatScreen(
-                                  receiverId: user['uid'],
-                                  receiverName: user['name'],
-                                  receiverImage: user['profileImage'],
-                                ),
-                              ),
+                  return ChatUserWidget(
+                    userName: user['name'],
+                    userId: user['uid'],
+                    userImage: user['profileImage'],
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BlocProvider(
+                            create: (context) => InChatCubit(),
+                            child: InChatScreen(
+                              receiverId: user['uid'],
+                              receiverName: user['name'],
+                              receiverImage: user['profileImage'],
                             ),
-                          );
-                        },
-                      ),
-                    ],
+                          ),
+                        ),
+                      );
+                    },
                   );
                 },
                 separatorBuilder: (context, index) {

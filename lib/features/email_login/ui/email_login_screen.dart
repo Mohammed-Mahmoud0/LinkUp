@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:link_up/core/helpers/show_snack_bar.dart';
+import 'package:link_up/core/helpers/helper_functions.dart';
 import 'package:link_up/core/helpers/spacing.dart';
 import 'package:link_up/core/helpers/validators.dart';
 import 'package:link_up/core/theming/colors.dart';

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:link_up/core/helpers/helper_functions.dart';
 import 'package:link_up/core/helpers/spacing.dart';
 import 'package:link_up/core/theming/colors.dart';
 import 'package:link_up/core/theming/icon_broken.dart';
@@ -9,10 +10,17 @@ AppBar inChatAppBar(context, receiverName, receiverImage) {
     title: Row(
       children: [
         receiverImage != null
-            ? CircleAvatar(
-                backgroundColor: ColorsManager.dark,
-                backgroundImage: NetworkImage(receiverImage!),
-                radius: 22.r,
+            ? GestureDetector(
+                onTap: () {
+                  if (receiverImage != null) {
+                    showFullScreenImage(context, receiverImage!);
+                  }
+                },
+                child: CircleAvatar(
+                  backgroundColor: ColorsManager.dark,
+                  backgroundImage: NetworkImage(receiverImage!),
+                  radius: 22.r,
+                ),
               )
             : CircleAvatar(
                 backgroundColor: ColorsManager.dark,
