@@ -11,10 +11,16 @@ import 'package:link_up/features/in_chat/logic/in_chat_states.dart';
 import 'package:link_up/features/in_chat/ui/widgets/in_chat_app_bar.dart';
 import 'package:link_up/features/in_chat/ui/widgets/message_list.dart';
 
-class InChatScreen extends StatefulWidget {
+class InChatScreen extends StatelessWidget {
   final String receiverId;
   final String receiverName;
   final String? receiverImage;
+
+  final TextEditingController _messageController = TextEditingController();
+
+  final AudioPlayer audioPlayer = AudioPlayer();
+
+  final ScrollController scrollController = ScrollController();
 
   InChatScreen({
     super.key,
@@ -24,53 +30,11 @@ class InChatScreen extends StatefulWidget {
   });
 
   @override
-  State<InChatScreen> createState() => _InChatScreenState();
-}
-
-class _InChatScreenState extends State<InChatScreen> {
-  final TextEditingController _messageController = TextEditingController();
-  final AudioPlayer audioPlayer = AudioPlayer();
-  FocusNode focusNode = FocusNode();
-  ScrollController scrollController = ScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      scrollDown();
-    });
-
-    focusNode.addListener(() {
-      if (focusNode.hasFocus) {
-        Future.delayed(
-          const Duration(milliseconds: 500),
-          () => scrollDown(),
-        );
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    focusNode.dispose();
-    _messageController.dispose();
-    super.dispose();
-  }
-
-  void scrollDown() {
-    if (scrollController.hasClients) {
-      scrollController.jumpTo(
-        scrollController.position.maxScrollExtent,
-      );
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     var cubit = InChatCubit.get(context);
+
     return Scaffold(
-      appBar: inChatAppBar(context, widget.receiverName, widget.receiverImage),
+      appBar: inChatAppBar(context, receiverName, receiverImage),
       body: Column(
         children: [
           Expanded(
@@ -79,7 +43,7 @@ class _InChatScreenState extends State<InChatScreen> {
                 width: double.infinity,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: MessageList(widget.receiverId, scrollController),
+                  child: MessageList(receiverId, scrollController, context),
                 )),
           ),
           Padding(
@@ -96,7 +60,6 @@ class _InChatScreenState extends State<InChatScreen> {
                 ),
                 Expanded(
                   child: AppTextFormField(
-                    focusNode: focusNode,
                     hintText: 'Type a message...',
                     hintStyle: TextStyle(
                       color: ColorsManager.offWhite,
@@ -141,14 +104,13 @@ class _InChatScreenState extends State<InChatScreen> {
                                   height: 40.h,
                                   width: 40.w,
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
+                                    borderRadius: BorderRadius.circular(20.r),
                                     color: ColorsManager.dark,
                                   ),
                                   child: IconButton(
                                     onPressed: () async {
                                       if (_messageController.text.isNotEmpty) {
-                                        await cubit.sendMessage(
-                                            widget.receiverId,
+                                        await cubit.sendMessage(receiverId,
                                             _messageController.text);
                                         _messageController.clear();
                                         cubit.scrollDown(scrollController);
