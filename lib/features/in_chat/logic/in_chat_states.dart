@@ -19,3 +19,7 @@ class InChatErrorState extends InChatStates {
 }
 
 class InChatNewMessageSentState extends InChatStates {}
+
+class InChatShowKeyboardState extends InChatStates {}
+
+class InChatHideKeyboardState extends InChatStates {}

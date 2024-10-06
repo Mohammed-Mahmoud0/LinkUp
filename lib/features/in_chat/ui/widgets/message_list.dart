@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:link_up/core/helpers/spacing.dart';
 import 'package:link_up/core/models/message.dart';
-import 'package:link_up/core/theming/colors.dart';
 import 'package:link_up/features/in_chat/logic/in_chat_cubit.dart';
 import 'package:link_up/features/in_chat/ui/widgets/chat_bubble.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 Widget MessageList(receiverId, scrollController, context) {
   bool isInitialLoad = true;
@@ -19,11 +20,33 @@ Widget MessageList(receiverId, scrollController, context) {
       }
 
       if (snapshot.connectionState == ConnectionState.waiting) {
-        return const Center(
-          child: CircularProgressIndicator(
-            backgroundColor: ColorsManager.mainBlue,
-            color: ColorsManager.dark,
-          ),
+        // return const Center(
+        //   child: CircularProgressIndicator(
+        //     backgroundColor: ColorsManager.mainBlue,
+        //     color: ColorsManager.dark,
+        //   ),
+        // );
+
+        return ListView.builder(
+          itemCount: 4,
+          itemBuilder: (context, index) {
+            return Skeletonizer(
+              // containersColor: ColorsManager.backgroundDark,
+              enableSwitchAnimation: true,
+              child: Column(
+                children: [
+                  ChatBubbleSender(
+                    message: 'Loading ...',
+                  ),
+                  verticalSpace(20.h),
+                  ChatBubbleReceiver(
+                    message: 'Loading ...',
+                  ),
+                  verticalSpace(20.h),
+                ],
+              ),
+            );
+          },
         );
       }
 

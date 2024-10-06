@@ -22,13 +22,10 @@ class LinkUp extends StatelessWidget {
     bool hasViewedOnboarding = prefs.getBool('hasViewedOnboarding') ?? false;
 
     if (FirebaseAuth.instance.currentUser != null) {
-      // User is logged in
       return '/home';
     } else if (hasViewedOnboarding) {
-      // User is not logged in but has viewed onboarding
       return '/email_login';
     } else {
-      // User is not logged in and has not viewed onboarding
       await prefs.setBool('hasViewedOnboarding', true);
       return '/onboarding';
     }

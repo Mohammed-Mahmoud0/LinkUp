@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:link_up/core/helpers/spacing.dart';
 import 'package:link_up/core/theming/colors.dart';
+import 'package:link_up/core/theming/icon_broken.dart';
 import 'package:link_up/features/chat/logic/chats_cubit.dart';
 import 'package:link_up/features/chat/logic/chats_states.dart';
 import 'package:link_up/features/chat/ui/widgets/chat_user_widget.dart';
 import 'package:link_up/features/in_chat/logic/in_chat_cubit.dart';
 import 'package:link_up/features/in_chat/ui/in_chat_screen.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 Widget buildUsersList(BuildContext context) {
   final ScrollController _scrollController = ScrollController();
@@ -14,9 +17,22 @@ Widget buildUsersList(BuildContext context) {
   return BlocBuilder<ChatsCubit, ChatsStates>(
     builder: (context, state) {
       if (state is ChatsLoadingState) {
-        return const CircularProgressIndicator(
-          backgroundColor: ColorsManager.mainBlue,
-          color: ColorsManager.dark,
+        // return const CircularProgressIndicator(
+        //   backgroundColor: ColorsManager.mainBlue,
+        //   color: ColorsManager.dark,
+        // );
+        return Expanded(
+          child: ListView.builder(
+            physics: const BouncingScrollPhysics(),
+            itemCount: 6,
+            itemBuilder: (context, index) {
+              return Skeletonizer(
+                containersColor: ColorsManager.dark,
+                enableSwitchAnimation: true,
+                child: dummyUserWidget(),
+              );
+            },
+          ),
         );
       } else if (state is ChatsSuccessLoadedState) {
         var filteredUsers = context.read<ChatsCubit>().filteredUsers;
@@ -88,5 +104,27 @@ Widget buildUsersList(BuildContext context) {
 
       return const SizedBox();
     },
+  );
+}
+
+Widget dummyUserWidget() {
+  return Card(
+    child: Row(
+      children: [
+        CircleAvatar(
+          backgroundColor: ColorsManager.dark,
+          radius: 28.r,
+          child: Icon(
+            IconBroken.Profile,
+            size: 40.sp,
+            color: ColorsManager.offWhite,
+          ),
+        ),
+        horizontalSpace(16.w),
+        Text(
+          'User Name',
+        ),
+      ],
+    ),
   );
 }

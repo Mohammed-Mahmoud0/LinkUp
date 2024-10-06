@@ -20,6 +20,8 @@ class AppTextFormField extends StatelessWidget {
   final FocusNode? focusNode;
   final String? Function(String?)? validator;
   final Function(String)? onChanged;
+  final VoidCallback? onTap;
+  final Function(PointerDownEvent)? onTapOutside;
 
   const AppTextFormField({
     super.key,
@@ -40,6 +42,8 @@ class AppTextFormField extends StatelessWidget {
     this.focusNode,
     this.validator,
     this.onChanged,
+    this.onTap,
+    this.onTapOutside,
   });
 
   @override
@@ -48,6 +52,9 @@ class AppTextFormField extends StatelessWidget {
       controller: controller,
       validator: validator,
       onChanged: onChanged,
+      onTap: onTap,
+      onTapOutside:
+          onTapOutside != null ? (event) => onTapOutside!(event) : null,
       decoration: InputDecoration(
         isDense: true,
         contentPadding: contentPadding ??

@@ -80,4 +80,12 @@ class InChatCubit extends Cubit<InChatStates> {
       }
     }
   }
+
+  void showKeyboard() {
+    emit(InChatShowKeyboardState());
+  }
+
+  void hideKeyboard() {
+    emit(InChatHideKeyboardState());
+  }
 }

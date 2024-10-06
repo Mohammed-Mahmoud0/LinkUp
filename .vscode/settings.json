@@ -4,6 +4,8 @@
     "autofocus",
     "firestore",
     "prefs",
-    "Schyler"
+    "Schyler",
+    "skeletonizer",
+    "unfocus"
   ]
 }
