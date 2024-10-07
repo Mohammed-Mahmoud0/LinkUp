@@ -13,13 +13,13 @@ import 'package:link_up/features/email_register/logic/register_states.dart';
 import 'package:link_up/features/email_register/ui/widgets/already_have_account.dart';
 
 class EmailRegisterScreen extends StatelessWidget {
-  TextEditingController name = TextEditingController();
+  final TextEditingController name = TextEditingController();
 
-  TextEditingController phone = TextEditingController();
+  final TextEditingController phone = TextEditingController();
 
-  TextEditingController email = TextEditingController();
+  final TextEditingController email = TextEditingController();
 
-  TextEditingController password = TextEditingController();
+  final TextEditingController password = TextEditingController();
 
   final formKey = GlobalKey<FormState>();
 

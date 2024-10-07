@@ -8,9 +8,6 @@ import 'package:link_up/features/email_login/ui/email_login_screen.dart';
 import 'package:link_up/features/email_register/ui/email_register_screen.dart';
 import 'package:link_up/features/home/ui/home_screen.dart';
 import 'package:link_up/features/onboarding/onboarding_screen.dart';
-import 'package:link_up/features/phone_login/phone_login_screen.dart';
-import 'package:link_up/features/phone_verification/phone_verification_screen.dart';
-import 'package:link_up/features/profile/profile_screen.dart';
 import 'package:link_up/features/settings/settings_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -67,9 +64,6 @@ class LinkUp extends StatelessWidget {
                 '/onboarding': (context) => const OnboardingScreen(),
                 '/email_register': (context) => EmailRegisterScreen(),
                 '/email_login': (context) => EmailLoginScreen(),
-                '/phone_login': (context) => PhoneLoginScreen(),
-                '/phone_verification': (context) => PhoneVerificationScreen(),
-                '/profile': (context) => const ProfileScreen(),
                 '/home': (context) => HomeScreen(),
                 '/chats': (context) => const ChatsScreen(),
                 '/settings': (context) => const SettingsScreen(),
