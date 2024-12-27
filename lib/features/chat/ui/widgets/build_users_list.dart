@@ -17,10 +17,6 @@ Widget buildUsersList(BuildContext context) {
   return BlocBuilder<ChatsCubit, ChatsStates>(
     builder: (context, state) {
       if (state is ChatsLoadingState) {
-        // return const CircularProgressIndicator(
-        //   backgroundColor: ColorsManager.mainBlue,
-        //   color: ColorsManager.dark,
-        // );
         return Expanded(
           child: ListView.builder(
             physics: const BouncingScrollPhysics(),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:link_up/core/helpers/helper_functions.dart';
 import 'package:link_up/core/theming/colors.dart';
 import 'package:link_up/core/theming/icon_broken.dart';
 import 'package:link_up/features/settings/logic/settings_cubit.dart';
@@ -21,10 +22,18 @@ class ProfileImageWidget extends StatelessWidget {
         return Stack(
           children: [
             if (cubit.userModel?.profileImage != null)
-              CircleAvatar(
-                backgroundColor: ColorsManager.dark,
-                backgroundImage: NetworkImage(cubit.userModel!.profileImage!),
-                radius: 64.r,
+              GestureDetector(
+                onTap: () {
+                  showFullScreenImage(
+                    context,
+                    cubit.userModel!.profileImage!,
+                  );
+                },
+                child: CircleAvatar(
+                  backgroundColor: ColorsManager.dark,
+                  backgroundImage: NetworkImage(cubit.userModel!.profileImage!),
+                  radius: 64.r,
+                ),
               )
             else
               CircleAvatar(
